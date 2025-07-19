@@ -1,0 +1,50 @@
+spring:
+  kafka:
+    properties:
+      sasl:
+        mechanism: PLAIN
+        jaas:
+          config: org.apache.kafka.common.security.plain.PlainLoginModule required username= ${KAFKA_USER:} password=${KAFKA_PASSWORD:};
+      bootstrap:
+        servers: pkc-56d1g.eastus.azure.confluent.cloud:9092
+      security:
+        protocol: SASL_SSL
+      session:
+        timeout:
+          ms: 45000
+      request:
+        timeout:
+          ms: 2000
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+# Production environment specific Resilience4j configuration
+resilience4j:
+  circuitbreaker:
+    instances:
+      clienteService:
+        registerHealthIndicator: true
+        slidingWindowSize: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s  
+logging:
+  level:
+    org:
+      apache:
+        kafka: OFF
+  transactional:
+    sendLog: true
+    kafka:
+      topic:
+        name: ${KAFKA_TOPIC:}
+    tracer:
+      exclusion:
+        uri: actuator,swagger,api-docs,csrf,favicon  
+    obfuscation:
+      fields: ${MY_FIELDS_TO_OFUSCATE:(id)|(phone)|(lastName)}
+      enabled: false
+      character: '*****************'
+      obfuscation-type: REQUEST
+    handle-error:
+      status-code: 404

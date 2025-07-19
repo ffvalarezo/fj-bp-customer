@@ -1,0 +1,135 @@
+### Customer API Test Endpoints
+### This file contains examples of requests to test the Customer API
+
+### 1. Get all customers
+GET http://localhost:8080/api/v1/customers
+x-guid: 123e4567-e89b-12d3-a456-426614174000
+x-channel: 01
+x-medium: 01
+x-app: 12345
+x-session: test-session-123
+Content-Type: application/json
+
+###
+
+### 2. Get customer by ID (existing)
+GET http://localhost:8080/api/v1/customers/1
+x-guid: 123e4567-e89b-12d3-a456-426614174000
+x-channel: 01
+x-medium: 01
+x-app: 12345
+x-session: test-session-123
+Content-Type: application/json
+
+###
+
+### 3. Get customer by ID (non-existing)
+GET http://localhost:8080/api/v1/customers/999
+x-guid: 123e4567-e89b-12d3-a456-426614174000
+x-channel: 01
+x-medium: 01
+x-app: 12345
+x-session: test-session-123
+Content-Type: application/json
+
+###
+
+### 4. Create a new customer
+POST http://localhost:8080/api/v1/customers
+x-guid: 123e4567-e89b-12d3-a456-426614174000
+x-channel: 01
+x-medium: 01
+x-app: 12345
+x-session: test-session-123
+Content-Type: application/json
+
+{
+  "fullName": "Ana Rodriguez",
+  "gender": "Female",
+  "age": 30,
+  "identification": "1122334455",
+  "address": "Quito st and central",
+  "celular": "0987123456",
+  "email": "ana.rodriguez@example.com",
+  "password": "secure123",
+  "active": true
+}
+
+###
+
+### 5. Update an existing customer
+PUT http://localhost:8080/api/v1/customers/1
+x-guid: 123e4567-e89b-12d3-a456-426614174000
+x-channel: 01
+x-medium: 01
+x-app: 12345
+x-session: test-session-123
+Content-Type: application/json
+
+{
+  "fullName": "Jose Lema Updated",
+  "gender": "Male",
+  "age": 36,
+  "identification": "1234567890",
+  "address": "Updated Otavalo st and principal",
+  "celular": "0982547852",
+  "email": "jose.lema.updated@example.com",
+  "password": "updated1234",
+  "active": true
+}
+
+###
+
+### 6. Update a non-existing customer
+PUT http://localhost:8080/api/v1/customers/999
+x-guid: 123e4567-e89b-12d3-a456-426614174000
+x-channel: 01
+x-medium: 01
+x-app: 12345
+x-session: test-session-123
+Content-Type: application/json
+
+{
+  "fullName": "Non Existing Customer",
+  "gender": "Male",
+  "age": 25,
+  "identification": "9999999999",
+  "address": "Non existing address",
+  "celular": "0999999999",
+  "email": "nonexisting@example.com",
+  "password": "pass123",
+  "active": true
+}
+
+###
+
+### 7. Delete customer by ID
+DELETE http://localhost:8080/api/v1/customers/1
+x-guid: 123e4567-e89b-12d3-a456-426614174000
+x-channel: 01
+x-medium: 01
+x-app: 12345
+x-session: test-session-123
+
+###
+
+### 8. Test with invalid headers (missing required x-guid)
+GET http://localhost:8080/api/v1/customers
+x-channel: 01
+x-medium: 01
+x-app: 12345
+x-session: test-session-123
+Content-Type: application/json
+
+###
+
+### 9. Test with invalid GUID format
+GET http://localhost:8080/api/v1/customers
+x-guid: invalid-guid-format
+x-channel: 01
+x-medium: 01
+x-app: 12345
+x-session: test-session-123
+Content-Type: application/json
+
+###

@@ -1,0 +1,147 @@
+import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
+
+plugins {
+    id 'jacoco'
+	id 'java'
+	id 'org.springframework.boot' version '3.5.3'
+    id 'io.spring.dependency-management' version '1.1.7'
+	id 'org.openapi.generator' version '7.9.0'
+} 
+
+def packageName = "com.pichincha.customer"
+
+springBoot {
+	mainClass = "${packageName}.OptimusApplication"
+}
+
+
+group = "com.pichincha.customer"
+version = "0.0.1"
+
+java {
+  sourceCompatibility = JavaVersion.VERSION_21
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(21)
+  }
+}
+
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+    // Commented out while configuring environment variables
+    // maven {
+    //     url "https://pkgs.dev.azure.com/BancoPichinchaEC/0f20bf47-c965-46fe-8bd4-91df57fbb2e7/_packaging/Framework/maven/v1"
+    //     name "BancoPichinchaEC"
+    //     credentials {
+    //         username System.getenv("ARTIFACT_USERNAME")
+    //         password System.getenv("ARTIFACT_TOKEN")
+    //     }
+    // }    
+} 
+
+ext {
+}
+
+
+dependencies {
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.8.0'
+    implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
+    // implementation 'com.pichincha.common:lib-transactional-log-webflux-sb3:1.8.0'
+    
+    // Resilience4j dependencies for fault tolerance patterns
+    implementation 'io.github.resilience4j:resilience4j-spring-boot3:2.2.0'
+    implementation 'io.github.resilience4j:resilience4j-reactor:2.2.0'
+    implementation 'io.github.resilience4j:resilience4j-circuitbreaker:2.2.0'
+    implementation 'io.github.resilience4j:resilience4j-retry:2.2.0'
+    implementation 'io.github.resilience4j:resilience4j-ratelimiter:2.2.0'
+    implementation 'io.github.resilience4j:resilience4j-timelimiter:2.2.0'
+    implementation 'io.github.resilience4j:resilience4j-bulkhead:2.2.0'
+    implementation 'io.github.resilience4j:resilience4j-micrometer:2.2.0'
+	
+    //test
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testImplementation "io.projectreactor:reactor-test"
+    testImplementation "org.junit.jupiter:junit-jupiter-engine"
+    testImplementation 'io.github.resilience4j:resilience4j-test:2.2.0'
+}
+ 
+
+tasks.register('optimusCreateUnitTest', JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = "com.pichincha.customer.core.ProcessMain"
+}
+
+compileJava {
+    options.compilerArgs += [
+            "-Amapstruct.suppressGeneratorTimestamp=true",
+            "-Amapstruct.suppressGeneratorVersionInfoComment=true",
+            "-Amapstruct.verbose=true",
+            "-Amapstruct.defaultComponentModel=spring"
+    ]
+}
+ 
+sourceSets.main.java.srcDirs = ["src/main/java", "build/generated/src/main/java"]
+
+springBoot{
+    buildInfo() 
+}
+
+test {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        xml.outputLocation = file("$buildDir/jacoco/test.xml")
+        html.outputLocation = file("$buildDir/jacoco/index.html")
+        html.required = true
+        csv.required = true
+    }
+}
+
+tasks.register('buildSpringServer', GenerateTask) {
+    generatorName = "spring"
+    inputSpec = "$rootDir/src/main/resources/openapi.yaml".toString()
+    outputDir = "$buildDir/generated".toString()
+    apiPackage = "com.pichincha.common.infrastructure.input.adapter.rest"
+    modelPackage = "com.pichincha.common.infrastructure.input.adapter.rest.models"
+    library = "spring-boot"
+    configOptions = [
+        skipDefaultInterface                    : "true",
+        useSpringBoot3                          : "true",
+        useJakartaEe                            : "true",
+        serializableModel                       : "true",
+        dateLibrary                             : "java8",
+        openApiNullable                         : "false",
+        reactive                                : "true",
+        apiFirst                                : "false",
+        delegatePattern                         : "false",
+        configPackage                           : "com.pichincha.common.config",
+        sourceFolder                            : "src/main/java",
+        basePackage                             : "com.pichincha.common",
+        disallowAdditionalPropertiesIfNotPresent: "true",
+        interfaceOnly                           : "true"
+    ]
+}
+
+compileJava.dependsOn buildSpringServer

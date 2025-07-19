@@ -1,0 +1,23 @@
+# Optimus Project Configuration
+# Generated on: 2025-07-18 22:04:45
+
+project:
+  name: customer
+  version: 0.0.1
+  
+language:
+  name: java
+  version: 21
+  spring_boot_version: 3.5.3
+
+architecture:
+  type: hexagonal
+
+framework:
+  name: springboot
+
+dependency_manager:
+  name: gradle
+paradigm: reactive
+optimus:
+  version: 3.0.0
