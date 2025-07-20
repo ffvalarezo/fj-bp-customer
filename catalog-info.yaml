@@ -2,7 +2,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   namespace: default
-  name: customer
+  name: customer-bp
   description: comming soon
 
   tags:
@@ -23,7 +23,7 @@ metadata:
     title: DocumentacionTecnica
  
   annotations:
-    dev.azure.com/project-repo: customer #Actualizar nombre del proyecto/nombre del repositorio
+    dev.azure.com/project-repo: customer-bp #Actualizar nombre del proyecto/nombre del repositorio
     dynatrace.com/dynatrace-entity-id: <dynatrace-entity-id> #Actualizar con el identificador de dynatrece
     sonarcloud.io/project-key: <sonarcloud-project-key> #Actualizar con el projectKey de Sonar
  

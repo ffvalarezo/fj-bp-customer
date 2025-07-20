@@ -8,14 +8,14 @@ plugins {
 	id 'org.openapi.generator' version '7.9.0'
 } 
 
-def packageName = "com.pichincha.customer"
+def packageName = "com.pichincha.customerbp"
 
 springBoot {
 	mainClass = "${packageName}.OptimusApplication"
 }
 
 
-group = "com.pichincha.customer"
+group = "com.pichincha.customerbp"
 version = "0.0.1"
 
 java {
@@ -34,15 +34,14 @@ configurations {
 
 repositories {
     mavenCentral()
-    // Commented out while configuring environment variables
-    // maven {
-    //     url "https://pkgs.dev.azure.com/BancoPichinchaEC/0f20bf47-c965-46fe-8bd4-91df57fbb2e7/_packaging/Framework/maven/v1"
-    //     name "BancoPichinchaEC"
-    //     credentials {
-    //         username System.getenv("ARTIFACT_USERNAME")
-    //         password System.getenv("ARTIFACT_TOKEN")
-    //     }
-    // }    
+    maven {
+        url "https://pkgs.dev.azure.com/BancoPichinchaEC/0f20bf47-c965-46fe-8bd4-91df57fbb2e7/_packaging/Framework/maven/v1"
+        name "BancoPichinchaEC"
+        credentials {
+            username System.getenv("ARTIFACT_USERNAME")
+            password System.getenv("ARTIFACT_TOKEN")
+        }
+    }    
 } 
 
 ext {
@@ -54,46 +53,60 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    
+    // MapStruct dependencies
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.8.0'
     implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
-    // implementation 'com.pichincha.common:lib-transactional-log-webflux-sb3:1.8.0'
+    implementation 'com.pichincha.common:lib-transactional-log-webflux-sb3:1.8.0'
+
+    // Security
+
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     
-    // Resilience4j dependencies for fault tolerance patterns
-    implementation 'io.github.resilience4j:resilience4j-spring-boot3:2.2.0'
-    implementation 'io.github.resilience4j:resilience4j-reactor:2.2.0'
-    implementation 'io.github.resilience4j:resilience4j-circuitbreaker:2.2.0'
-    implementation 'io.github.resilience4j:resilience4j-retry:2.2.0'
-    implementation 'io.github.resilience4j:resilience4j-ratelimiter:2.2.0'
-    implementation 'io.github.resilience4j:resilience4j-timelimiter:2.2.0'
-    implementation 'io.github.resilience4j:resilience4j-bulkhead:2.2.0'
-    implementation 'io.github.resilience4j:resilience4j-micrometer:2.2.0'
+    // Database dependencies
+    runtimeOnly 'org.postgresql:postgresql'
+    runtimeOnly 'org.postgresql:r2dbc-postgresql'
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'io.r2dbc:r2dbc-h2'
 	
     //test
     testImplementation "org.springframework.boot:spring-boot-starter-test"
     testImplementation "io.projectreactor:reactor-test"
     testImplementation "org.junit.jupiter:junit-jupiter-engine"
-    testImplementation 'io.github.resilience4j:resilience4j-test:2.2.0'
 }
  
 
 tasks.register('optimusCreateUnitTest', JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
-    mainClass = "com.pichincha.customer.core.ProcessMain"
+    mainClass = "com.pichincha.customerbp.core.ProcessMain"
 }
 
 compileJava {
+    dependsOn 'buildSpringServer'
     options.compilerArgs += [
             "-Amapstruct.suppressGeneratorTimestamp=true",
             "-Amapstruct.suppressGeneratorVersionInfoComment=true",
             "-Amapstruct.verbose=true",
-            "-Amapstruct.defaultComponentModel=spring"
+            "-Amapstruct.defaultComponentModel=spring",
+            '-Amapstruct.unmappedTargetPolicy=IGNORE'
+    ]
+}
+
+compileTestJava {
+    options.compilerArgs += [
+        '-Amapstruct.defaultComponentModel=spring',
+        '-Amapstruct.unmappedTargetPolicy=IGNORE'
     ]
 }
  
@@ -112,8 +125,8 @@ jacocoTestReport {
     dependsOn test
     reports {
         xml.required = true
-        xml.outputLocation = file("$buildDir/jacoco/test.xml")
-        html.outputLocation = file("$buildDir/jacoco/index.html")
+        xml.destination file("$buildDir/jacoco/test.xml")
+        html.destination file("$buildDir/jacoco/index.html")
         html.required = true
         csv.required = true
     }
@@ -143,5 +156,3 @@ tasks.register('buildSpringServer', GenerateTask) {
         interfaceOnly                           : "true"
     ]
 }
-
-compileJava.dependsOn buildSpringServer

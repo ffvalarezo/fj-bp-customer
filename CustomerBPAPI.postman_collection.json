@@ -1,0 +1,365 @@
+{
+	"info": {
+		"_postman_id": "644b3f53-2806-4f95-9763-43700b927ce9",
+		"name": "Customer BP API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24608568"
+	},
+	"item": [
+		{
+			"name": "Create Customer",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "mock-token",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					},
+					{
+						"key": "x-guid",
+						"value": "123e4567-e89b-12d3-a456-426614174000"
+					},
+					{
+						"key": "x-channel",
+						"value": "01"
+					},
+					{
+						"key": "x-medium",
+						"value": "01"
+					},
+					{
+						"key": "x-app",
+						"value": "12345"
+					},
+					{
+						"key": "x-session",
+						"value": "session123"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"fullName\": \"Jose Lema\",\n  \"gender\": \"Male\",\n  \"age\": 35,\n  \"identification\": \"11223344\",\n  \"address\": \"Otavalo st and principal\",\n  \"celular\": \"0982547852\",\n  \"email\": \"jose.lema@example.com\",\n  \"password\": \"1234\",\n  \"active\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/customers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"customers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Customers",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "mock-token",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-guid",
+						"value": "123e4567-e89b-12d3-a456-426614174000"
+					},
+					{
+						"key": "x-channel",
+						"value": "01"
+					},
+					{
+						"key": "x-medium",
+						"value": "01"
+					},
+					{
+						"key": "x-app",
+						"value": "12345"
+					},
+					{
+						"key": "x-session",
+						"value": "session123"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/customers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"customers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Customer By ID",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "mock-token",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-guid",
+						"value": "123e4567-e89b-12d3-a456-426614174000"
+					},
+					{
+						"key": "x-channel",
+						"value": "01"
+					},
+					{
+						"key": "x-medium",
+						"value": "01"
+					},
+					{
+						"key": "x-app",
+						"value": "12345"
+					},
+					{
+						"key": "x-session",
+						"value": "session123"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/customers/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"customers",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Customer",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "x-guid",
+						"value": "123e4567-e89b-12d3-a456-426614174000"
+					},
+					{
+						"key": "x-channel",
+						"value": "01"
+					},
+					{
+						"key": "x-medium",
+						"value": "01"
+					},
+					{
+						"key": "x-app",
+						"value": "12345"
+					},
+					{
+						"key": "x-session",
+						"value": "session123"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Jane Doe\",\n  \"identification\": \"1234567890\",\n  \"phone\": \"987654321\",\n  \"email\": \"janedoe@example.com\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/customers/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"customers",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Customer",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "x-guid",
+						"value": "123e4567-e89b-12d3-a456-426614174000"
+					},
+					{
+						"key": "x-channel",
+						"value": "01"
+					},
+					{
+						"key": "x-medium",
+						"value": "01"
+					},
+					{
+						"key": "x-app",
+						"value": "12345"
+					},
+					{
+						"key": "x-session",
+						"value": "session123"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/customers/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"customers",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ValidaPing",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-guid",
+						"value": "123e4567-e89b-12d3-a456-426614174000"
+					},
+					{
+						"key": "x-channel",
+						"value": "01"
+					},
+					{
+						"key": "x-medium",
+						"value": "01"
+					},
+					{
+						"key": "x-app",
+						"value": "12345"
+					},
+					{
+						"key": "x-session",
+						"value": "session123"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/auth/ping",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"auth",
+						"ping"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ver admin",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "mock-token",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-guid",
+						"value": "123e4567-e89b-12d3-a456-426614174000"
+					},
+					{
+						"key": "x-channel",
+						"value": "01"
+					},
+					{
+						"key": "x-medium",
+						"value": "01"
+					},
+					{
+						"key": "x-app",
+						"value": "12345"
+					},
+					{
+						"key": "x-session",
+						"value": "session123"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/auth/admin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"auth",
+						"admin"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
