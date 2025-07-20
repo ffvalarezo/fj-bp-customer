@@ -1,1 +1,7 @@
-rootProject.name = 'customer-bp'
+rootProject.name = 'spf-msa-bs-customer-fb'
+
+include 'common-config'
+include 'customer-service'
+include 'account-service'
+include 'movement-service'
+include 'report-service'

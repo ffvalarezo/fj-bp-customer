@@ -1,0 +1,118 @@
+{
+  "info": {
+    "name": "Customer BP API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create Customer",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "x-guid", "value": "123e4567-e89b-12d3-a456-426614174000" },
+          { "key": "x-channel", "value": "01" },
+          { "key": "x-medium", "value": "01" },
+          { "key": "x-app", "value": "12345" },
+          { "key": "x-session", "value": "session123" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"John Doe\",\n  \"identification\": \"1234567890\",\n  \"phone\": \"123456789\",\n  \"email\": \"johndoe@example.com\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/customers",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "customers"]
+        }
+      }
+    },
+    {
+      "name": "Get All Customers",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "x-guid", "value": "123e4567-e89b-12d3-a456-426614174000" },
+          { "key": "x-channel", "value": "01" },
+          { "key": "x-medium", "value": "01" },
+          { "key": "x-app", "value": "12345" },
+          { "key": "x-session", "value": "session123" }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/customers",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "customers"]
+        }
+      }
+    },
+    {
+      "name": "Get Customer By ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "x-guid", "value": "123e4567-e89b-12d3-a456-426614174000" },
+          { "key": "x-channel", "value": "01" },
+          { "key": "x-medium", "value": "01" },
+          { "key": "x-app", "value": "12345" },
+          { "key": "x-session", "value": "session123" }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/customers/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "customers", "1"]
+        }
+      }
+    },
+    {
+      "name": "Update Customer",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "x-guid", "value": "123e4567-e89b-12d3-a456-426614174000" },
+          { "key": "x-channel", "value": "01" },
+          { "key": "x-medium", "value": "01" },
+          { "key": "x-app", "value": "12345" },
+          { "key": "x-session", "value": "session123" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Jane Doe\",\n  \"identification\": \"1234567890\",\n  \"phone\": \"987654321\",\n  \"email\": \"janedoe@example.com\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/customers/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "customers", "1"]
+        }
+      }
+    },
+    {
+      "name": "Delete Customer",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          { "key": "x-guid", "value": "123e4567-e89b-12d3-a456-426614174000" },
+          { "key": "x-channel", "value": "01" },
+          { "key": "x-medium", "value": "01" },
+          { "key": "x-app", "value": "12345" },
+          { "key": "x-session", "value": "session123" }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/customers/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "customers", "1"]
+        }
+      }
+    }
+  ]
+}

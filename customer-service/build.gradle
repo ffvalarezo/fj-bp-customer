@@ -1,0 +1,127 @@
+import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
+
+plugins {
+    id 'jacoco'
+	id 'java'
+	id 'org.springframework.boot' version '3.5.3'
+    id 'io.spring.dependency-management' version '1.1.7'
+	id 'org.openapi.generator' version '7.9.0'
+} 
+
+def packageName = "com.pichincha.customer"
+
+springBoot {
+	mainClass = "${packageName}.OptimusApplication"
+}
+
+
+group = "com.pichincha.customer"
+version = "1.0.0"
+
+java {
+  sourceCompatibility = JavaVersion.VERSION_21
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(21)
+  }
+}
+
+bootJar {
+    archiveFileName = '.jar'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://pkgs.dev.azure.com/BancoPichinchaEC/0f20bf47-c965-46fe-8bd4-91df57fbb2e7/_packaging/Framework/maven/v1"
+        name "BancoPichinchaEC"
+        credentials {
+            username System.getenv("ARTIFACT_USERNAME")
+            password System.getenv("ARTIFACT_TOKEN")
+        }
+    }    
+} 
+
+ext {
+}
+
+
+dependencies {
+    implementation project(':common-config')    
+}
+ 
+
+tasks.register('optimusCreateUnitTest', JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = "com.pichincha.customer.core.ProcessMain"
+}
+
+compileJava {
+    dependsOn 'buildSpringServer'
+    options.compilerArgs += [
+            "-Amapstruct.suppressGeneratorTimestamp=true",
+            "-Amapstruct.suppressGeneratorVersionInfoComment=true",
+            "-Amapstruct.verbose=true",
+            "-Amapstruct.defaultComponentModel=spring",
+            '-Amapstruct.unmappedTargetPolicy=IGNORE'
+    ]
+}
+
+compileTestJava {
+    options.compilerArgs += [
+        '-Amapstruct.defaultComponentModel=spring',
+        '-Amapstruct.unmappedTargetPolicy=IGNORE'
+    ]
+}
+ 
+sourceSets.main.java.srcDirs = ["src/main/java", "build/generated/src/main/java"]
+
+springBoot{
+    buildInfo() 
+}
+
+test {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        xml.destination file("$buildDir/jacoco/test.xml")
+        html.destination file("$buildDir/jacoco/index.html")
+        html.required = true
+        csv.required = true
+    }
+}
+
+tasks.register('buildSpringServer', GenerateTask) {
+    generatorName = "spring"
+    inputSpec = "$rootDir/customer-service/src/main/resources/openapi.yaml".toString()
+    outputDir = "$buildDir/generated".toString()
+    apiPackage = "com.pichincha.common.infrastructure.input.adapter.rest"
+    modelPackage = "com.pichincha.common.infrastructure.input.adapter.rest.models"
+    library = "spring-boot"
+    configOptions = [
+        skipDefaultInterface                    : "true",
+        useSpringBoot3                          : "true",
+        useJakartaEe                            : "true",
+        serializableModel                       : "true",
+        dateLibrary                             : "java8",
+        openApiNullable                         : "false",
+        reactive                                : "true",
+        apiFirst                                : "false",
+        delegatePattern                         : "false",
+        configPackage                           : "com.pichincha.common.config",
+        sourceFolder                            : "src/main/java",
+        basePackage                             : "com.pichincha.common",
+        disallowAdditionalPropertiesIfNotPresent: "true",
+        interfaceOnly                           : "true"
+    ]
+}
