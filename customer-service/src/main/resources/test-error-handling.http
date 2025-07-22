@@ -1,0 +1,17 @@
+### Test Error Handling in Customer Service
+GET http://localhost:8080/api/v1/test/error
+Content-Type: application/json
+x-guid: 12345678-1234-1234-1234-123456789012
+x-channel: 01
+x-medium: 01  
+x-app: 12345
+x-session: test-session-123
+
+### Test normal customer endpoint
+GET http://localhost:8080/api/v1/customers
+Content-Type: application/json
+x-guid: 12345678-1234-1234-1234-123456789012
+x-channel: 01
+x-medium: 01
+x-app: 12345
+x-session: test-session-123

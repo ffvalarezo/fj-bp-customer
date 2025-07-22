@@ -26,7 +26,7 @@ java {
 }
 
 bootJar {
-    archiveFileName = '.jar'
+    archiveFileName = 'customer-service.jar'
 }
 
 configurations {
@@ -36,15 +36,7 @@ configurations {
 }
 
 repositories {
-    mavenCentral()
-    maven {
-        url "https://pkgs.dev.azure.com/BancoPichinchaEC/0f20bf47-c965-46fe-8bd4-91df57fbb2e7/_packaging/Framework/maven/v1"
-        name "BancoPichinchaEC"
-        credentials {
-            username System.getenv("ARTIFACT_USERNAME")
-            password System.getenv("ARTIFACT_TOKEN")
-        }
-    }    
+    // Los repositorios se configuran en el build.gradle raíz en allprojects
 } 
 
 ext {
@@ -52,7 +44,19 @@ ext {
 
 
 dependencies {
-    implementation project(':common-config')    
+    implementation project(':common-config')
+    
+    // MapStruct dependencies (necesarias para que se genere la implementación)
+    annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+    
+    // Test dependencies from common-config testFixtures
+    testImplementation testFixtures(project(':common-config'))
+    
+    // Additional test dependencies
+    testImplementation 'org.mockito:mockito-core'
+    testImplementation 'org.mockito:mockito-junit-jupiter'
 }
  
 

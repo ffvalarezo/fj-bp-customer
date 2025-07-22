@@ -1,42 +1,64 @@
 plugins {
-    id 'java-library'
-}
+    id 'jacoco'
+	id 'java-library'
+	id 'java-test-fixtures'
+	id 'org.springframework.boot' version '3.5.3'
+    id 'io.spring.dependency-management' version '1.1.7'
+	id 'org.openapi.generator' version '7.9.0'
+} 
+
+group = 'com.pichincha'
+version = '1.0.0'
+sourceCompatibility = '17'
+
+repositories {
+    // Los repositorios se configuran en el build.gradle raíz en allprojects
+} 
 
 dependencies {
-    compileOnly 'org.projectlombok:lombok'
+    api 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     
     // MapStruct dependencies
-    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    api 'org.mapstruct:mapstruct:1.5.5.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
     annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    api 'org.springframework.boot:spring-boot-starter-actuator'
+    api 'org.springframework.boot:spring-boot-starter-validation'
 
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.8.0'
-    implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
-    implementation 'com.pichincha.common:lib-transactional-log-webflux-sb3:1.8.0'
+    api 'org.springframework.boot:spring-boot-starter-webflux'
+    api 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+    api 'org.springframework.boot:spring-boot-starter-data-jpa'
+    api 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.8.0'
+    api 'org.openapitools:jackson-databind-nullable:0.2.6'    
 
     // Security
-
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    api 'org.springframework.boot:spring-boot-starter-security'
+	api 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     
     // Database dependencies
     runtimeOnly 'org.postgresql:postgresql'
     runtimeOnly 'org.postgresql:r2dbc-postgresql'
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'io.r2dbc:r2dbc-h2'
+    
+    // Pichincha Framework
+    api 'com.pichincha.common:lib-transactional-log-webflux-sb3:1.8.0'
 	
-    //test
-    testImplementation "org.springframework.boot:spring-boot-starter-test"
-    testImplementation "io.projectreactor:reactor-test"
-    testImplementation "org.junit.jupiter:junit-jupiter-engine"
+    // YAML processing
+    api 'org.yaml:snakeyaml:2.0'
+	
+    // Test dependencies
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.projectreactor:reactor-test'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine'
+    
+    // Test fixtures - dependencias compartidas para tests
+    testFixturesApi 'org.springframework.boot:spring-boot-starter-test'
+    testFixturesApi 'io.projectreactor:reactor-test'
+    testFixturesApi 'org.junit.jupiter:junit-jupiter-engine'
 }
 
 java {
@@ -44,4 +66,8 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
+}
+
+springBoot {
+  mainClass = 'com.pichincha.common.config.WebConfig'
 }

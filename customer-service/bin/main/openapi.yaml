@@ -1,0 +1,338 @@
+openapi: 3.0.1
+info:
+  title: Customer Microservice API
+  description: API for managing customers in the financial application
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Local development server
+tags:
+  - name: Customers
+    description: Operations related to customer management
+
+paths:
+  /customers:
+    get:
+      tags:
+        - Customers
+      summary: Retrieve all customers
+      operationId: getAllCustomers
+      parameters:
+        - name: x-guid
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 60
+            pattern: '^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$'
+        - name: x-channel
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 2
+            pattern: '^\d+$'
+        - name: x-medium
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 2
+            pattern: '^\d+$'
+        - name: x-app
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 5
+            pattern: '^\d+$'
+        - name: x-session
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 100
+      responses:
+        '200':
+          description: A list of customers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+
+    post:
+      tags:
+        - Customers
+      summary: Create a new customer
+      operationId: createCustomer
+      parameters:
+        - name: x-guid
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 60
+            pattern: '^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$'
+        - name: x-channel
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 2
+            pattern: '^\d+$'
+        - name: x-medium
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 2
+            pattern: '^\d+$'
+        - name: x-app
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 5
+            pattern: '^\d+$'
+        - name: x-session
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 100
+      requestBody:
+        description: Customer to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+      responses:
+        '201':
+          description: Customer created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+
+  /customers/{id}:
+    get:
+      tags:
+        - Customers
+      summary: Get customer by ID
+      operationId: getCustomerById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: x-guid
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 60
+            pattern: '^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$'
+        - name: x-channel
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 2
+            pattern: '^\d+$'
+        - name: x-medium
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 2
+            pattern: '^\d+$'
+        - name: x-app
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 5
+            pattern: '^\d+$'
+        - name: x-session
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 100
+      responses:
+        '200':
+          description: Customer found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '404':
+          description: Customer not found
+
+    put:
+      tags:
+        - Customers
+      summary: Update an existing customer
+      operationId: updateCustomer
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: x-guid
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 60
+            pattern: '^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$'
+        - name: x-channel
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 2
+            pattern: '^\d+$'
+        - name: x-medium
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 2
+            pattern: '^\d+$'
+        - name: x-app
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 5
+            pattern: '^\d+$'
+        - name: x-session
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 100
+      requestBody:
+        description: Customer data to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+      responses:
+        '200':
+          description: Customer updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '404':
+          description: Customer not found
+
+    delete:
+      tags:
+        - Customers
+      summary: Delete customer by ID
+      operationId: deleteCustomer
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: x-guid
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 60
+            pattern: '^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$'
+        - name: x-channel
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 2
+            pattern: '^\d+$'
+        - name: x-medium
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 2
+            pattern: '^\d+$'
+        - name: x-app
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 5
+            pattern: '^\d+$'
+        - name: x-session
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 100
+      responses:
+        '204':
+          description: Customer deleted successfully
+        '404':
+          description: Customer not found
+
+components:
+  schemas:
+    Customer:
+      type: object
+      required:
+        - fullName
+        - gender
+        - age
+        - identification
+        - address
+        - celular
+        - email
+        - password
+        - active
+      properties:
+        fullName:
+          type: string
+          example: Jose Lema
+        gender:
+          type: string
+          example: Male
+        age:
+          type: integer
+          minimum: 18
+          example: 35
+        identification:
+          type: string
+          pattern: '^\d{1,10}$'
+          example: "1234567890"
+        address:
+          type: string
+          example: Otavalo st and principal
+        celular:
+          type: string
+          pattern: '^\d{10}$'
+          example: "0982547852"
+        email:
+          type: string
+          format: email
+          example: "jose.lema@example.com"
+        customerId:
+          type: integer
+          readOnly: true
+          example: 1
+        password:
+          type: string
+          example: "1234"
+        active:
+          type: boolean
+          example: true

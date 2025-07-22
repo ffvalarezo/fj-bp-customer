@@ -1,0 +1,14 @@
+artifactory_url=https://pkgs.dev.azure.com/BancoPichinchaEC/CD-Bankformers/_packaging/business-banking/maven/v1
+artifactory_user=BancoPichinchaEC
+
+# Azure DevOps Artifact Feed Credentials
+# Copia este archivo a gradle.properties y reemplaza con tus credenciales reales
+ARTIFACT_USERNAME=frvalare@pichincha.com
+ARTIFACT_TOKEN=3PRYiw90XNLT7lfrSYhhfCGPvjSfPuqgIj8aFauXKl3XmCibBjiaJQQJ99BGACAAAAAihC6zAAASAZDO3lpF
+
+org.gradle.caching=true
+gradle.cache.push=false
+
+org.gradle.parallel=true
+org.gradle.workers.max=4
+org.gradle.daemon=true

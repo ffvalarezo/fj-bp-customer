@@ -24,7 +24,9 @@ public class SecurityConfig {
 	public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
 		http.csrf(ServerHttpSecurity.CsrfSpec::disable)
 				.authorizeExchange(
-						exchange -> exchange.pathMatchers("/api/auth/**").permitAll().anyExchange().authenticated())
+						exchange -> exchange.pathMatchers("/api/auth/**").permitAll().pathMatchers("/webjars/**")
+								.permitAll().pathMatchers("/actuator/**").permitAll().pathMatchers("/swagger-ui/**")
+								.permitAll().pathMatchers("/v3/api-docs/**").permitAll().anyExchange().authenticated())
 				.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtDecoder(jwtDecoder())));
 		return http.build();
 	}

@@ -1,6 +1,0 @@
-.openapi-generator-ignore
-README.md
-pom.xml
-src/main/java/com/pichincha/common/infrastructure/input/adapter/rest/ApiUtil.java
-src/main/java/com/pichincha/common/infrastructure/input/adapter/rest/CustomersApi.java
-src/main/java/com/pichincha/common/infrastructure/input/adapter/rest/models/Customer.java

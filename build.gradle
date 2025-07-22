@@ -10,9 +10,27 @@ plugins {
 
 allprojects {
     group = 'com.pichincha'
-    version = '0.0.1'
+    version = '1.0.0'
     repositories {
         mavenCentral()
+        
+        // Repositorio de Azure DevOps - primero busca en variables de entorno, luego en gradle.properties
+        def artifactUsername = System.getenv("ARTIFACT_USERNAME") ?: (project.hasProperty("ARTIFACT_USERNAME") ? project.property("ARTIFACT_USERNAME") : null)
+        def artifactToken = System.getenv("ARTIFACT_TOKEN") ?: (project.hasProperty("ARTIFACT_TOKEN") ? project.property("ARTIFACT_TOKEN") : null)
+        
+        if (artifactUsername && artifactToken) {
+            maven {
+                url "https://pkgs.dev.azure.com/BancoPichinchaEC/0f20bf47-c965-46fe-8bd4-91df57fbb2e7/_packaging/Framework/maven/v1"
+                name "BancoPichinchaEC"
+                credentials {
+                    username artifactUsername
+                    password artifactToken
+                }
+            }
+            println "INFO: Azure DevOps repository configured successfully for ${project.name}"
+        } else {
+            println "WARNING: Azure DevOps credentials not found for ${project.name}. Set ARTIFACT_USERNAME and ARTIFACT_TOKEN as environment variables or in gradle.properties"
+        }
     }
 }
 
