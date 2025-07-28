@@ -19,6 +19,12 @@ dependencies {
     api 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+    //JWT Security
+
+    api 'io.jsonwebtoken:jjwt-api:0.11.5'
+    api 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    api 'io.jsonwebtoken:jjwt-jackson:0.11.5'
     
     // MapStruct dependencies
     api 'org.mapstruct:mapstruct:1.5.5.Final'
@@ -45,10 +51,17 @@ dependencies {
     runtimeOnly 'io.r2dbc:r2dbc-h2'
     
     // Pichincha Framework
-    api 'com.pichincha.common:lib-transactional-log-webflux-sb3:1.8.0'
+    //api 'com.pichincha.common:lib-transactional-log-webflux-sb3:1.8.0'
 	
     // YAML processing
     api 'org.yaml:snakeyaml:2.0'
+    
+    // Resilience4j for Circuit Breaker pattern
+    api 'io.github.resilience4j:resilience4j-spring-boot3:2.2.0'
+    api 'io.github.resilience4j:resilience4j-reactor:2.2.0'
+    api 'io.github.resilience4j:resilience4j-circuitbreaker:2.2.0'
+    api 'io.github.resilience4j:resilience4j-retry:2.2.0'
+    api 'io.github.resilience4j:resilience4j-timelimiter:2.2.0'
 	
     // Test dependencies
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

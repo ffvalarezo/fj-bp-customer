@@ -13,7 +13,6 @@
             <option value="$PROJECT_DIR$/common-config" />
             <option value="$PROJECT_DIR$/customer-service" />
             <option value="$PROJECT_DIR$/movement-service" />
-            <option value="$PROJECT_DIR$/report-service" />
           </set>
         </option>
       </GradleProjectSettings>

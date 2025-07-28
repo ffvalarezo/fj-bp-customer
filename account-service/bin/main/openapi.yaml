@@ -279,6 +279,61 @@ paths:
           description: Account deleted successfully
         '404':
           description: Account not found
+  /accounts/filter/{customerId}:
+    get:
+      tags:
+        - Accounts
+      summary: Get all accounts by customerId
+      operationId: getAccountsByCustomerId
+      parameters:        
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: integer        
+        - name: x-guid
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 60
+            pattern: '^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$'
+        - name: x-channel
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 2
+            pattern: '^\d+$'
+        - name: x-medium
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 2
+            pattern: '^\d+$'
+        - name: x-app
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 5
+            pattern: '^\d+$'
+        - name: x-session
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 100
+      responses:
+        '200':
+          description: List of accounts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccountRequest'
 components:
   schemas:
     AccountRequest:
@@ -294,5 +349,5 @@ components:
         status:
           type: boolean
         customerId:
-          type: string
+          type: integer
       required: [accountNumber, accountType, initialBalance, status, customerId]

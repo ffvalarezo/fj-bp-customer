@@ -114,7 +114,7 @@ newException:
   detail: You do not have permission to access this resource
   type: /errors/forbidden
   resource: customer-service
-  backend: customer-bp
+  backend: spf-msa-bs-customer-fb
   component: customer-management
   instance: /customers
   errors:

@@ -10,10 +10,6 @@ import com.pichincha.account.service.AccountQueryService;
 import com.pichincha.common.infrastructure.input.adapter.rest.AccountsApi;
 import com.pichincha.common.infrastructure.input.adapter.rest.models.AccountRequest;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -29,53 +25,40 @@ public class AccountController implements AccountsApi {
 	}
 
 	@Override
-	public Mono<ResponseEntity<AccountRequest>> createAccount(
-			@NotNull @Pattern(regexp = "^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$") @Size(max = 60) String xGuid,
-			@NotNull @Pattern(regexp = "^\\d+$") @Size(max = 2) String xChannel,
-			@NotNull @Pattern(regexp = "^\\d+$") @Size(max = 2) String xMedium,
-			@NotNull @Pattern(regexp = "^\\d+$") @Size(max = 5) String xApp, @NotNull @Size(max = 100) String xSession,
-			@Valid Mono<AccountRequest> accountRequest, ServerWebExchange exchange) {
+	public Mono<ResponseEntity<AccountRequest>> createAccount(String xGuid, String xChannel, String xMedium,
+			String xApp, String xSession, Mono<AccountRequest> accountRequest, ServerWebExchange exchange) {
 		return commandService.createAccount(accountRequest)
 				.map(created -> ResponseEntity.status(HttpStatus.CREATED).body(created));
 	}
 
 	@Override
-	public Mono<ResponseEntity<Void>> deleteAccount(Integer id,
-			@NotNull @Pattern(regexp = "^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$") @Size(max = 60) String xGuid,
-			@NotNull @Pattern(regexp = "^\\d+$") @Size(max = 2) String xChannel,
-			@NotNull @Pattern(regexp = "^\\d+$") @Size(max = 2) String xMedium,
-			@NotNull @Pattern(regexp = "^\\d+$") @Size(max = 5) String xApp, @NotNull @Size(max = 100) String xSession,
-			ServerWebExchange exchange) {
+	public Mono<ResponseEntity<Void>> deleteAccount(Integer id, String xGuid, String xChannel, String xMedium,
+			String xApp, String xSession, ServerWebExchange exchange) {
 		return commandService.deleteAccount(id).thenReturn(ResponseEntity.noContent().build());
 	}
 
 	@Override
-	public Mono<ResponseEntity<AccountRequest>> getAccountById(Integer id,
-			@NotNull @Pattern(regexp = "^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$") @Size(max = 60) String xGuid,
-			@NotNull @Pattern(regexp = "^\\d+$") @Size(max = 2) String xChannel,
-			@NotNull @Pattern(regexp = "^\\d+$") @Size(max = 2) String xMedium,
-			@NotNull @Pattern(regexp = "^\\d+$") @Size(max = 5) String xApp, @NotNull @Size(max = 100) String xSession,
-			ServerWebExchange exchange) {
+	public Mono<ResponseEntity<AccountRequest>> getAccountById(Integer id, String xGuid, String xChannel,
+			String xMedium, String xApp, String xSession, ServerWebExchange exchange) {
 		return queryService.getAccountById(id).map(ResponseEntity::ok);
 	}
 
 	@Override
-	public Mono<ResponseEntity<Flux<AccountRequest>>> getAllAccounts(
-			@NotNull @Pattern(regexp = "^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$") @Size(max = 60) String xGuid,
-			@NotNull @Pattern(regexp = "^\\d+$") @Size(max = 2) String xChannel,
-			@NotNull @Pattern(regexp = "^\\d+$") @Size(max = 2) String xMedium,
-			@NotNull @Pattern(regexp = "^\\d+$") @Size(max = 5) String xApp, @NotNull @Size(max = 100) String xSession,
-			ServerWebExchange exchange) {
+	public Mono<ResponseEntity<Flux<AccountRequest>>> getAccountsByCustomerId(Integer customerId, String xGuid,
+			String xChannel, String xMedium, String xApp, String xSession, ServerWebExchange exchange) {
+		return Mono.just(ResponseEntity.ok(queryService.getAccountByCustomerId(customerId)));
+	}
+
+	@Override
+	public Mono<ResponseEntity<Flux<AccountRequest>>> getAllAccounts(String xGuid, String xChannel, String xMedium,
+			String xApp, String xSession, ServerWebExchange exchange) {
 		return Mono.just(ResponseEntity.ok(queryService.getAllAccounts()));
 	}
 
 	@Override
-	public Mono<ResponseEntity<AccountRequest>> updateAccount(Integer id,
-			@NotNull @Pattern(regexp = "^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$") @Size(max = 60) String xGuid,
-			@NotNull @Pattern(regexp = "^\\d+$") @Size(max = 2) String xChannel,
-			@NotNull @Pattern(regexp = "^\\d+$") @Size(max = 2) String xMedium,
-			@NotNull @Pattern(regexp = "^\\d+$") @Size(max = 5) String xApp, @NotNull @Size(max = 100) String xSession,
-			@Valid Mono<AccountRequest> accountRequest, ServerWebExchange exchange) {
+	public Mono<ResponseEntity<AccountRequest>> updateAccount(Integer id, String xGuid, String xChannel, String xMedium,
+			String xApp, String xSession, Mono<AccountRequest> accountRequest, ServerWebExchange exchange) {
 		return commandService.updateAccount(id, accountRequest).map(updated -> ResponseEntity.ok(updated));
 	}
+
 }

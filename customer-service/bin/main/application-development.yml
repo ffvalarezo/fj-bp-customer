@@ -69,3 +69,33 @@ logging:
       resourceserver:
         jwt:
           issuer-uri: dummy
+
+# Resilience4j Circuit Breaker Configuration
+resilience4j:
+  circuitbreaker:
+    instances:
+      customerService:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 5s
+        failureRateThreshold: 50
+        eventConsumerBufferSize: 10
+        ignoreExceptions:
+          - com.pichincha.customer.infrastructure.exception.CustomerNotFoundException
+  retry:
+    instances:
+      customerService:
+        maxAttempts: 5
+        waitDuration: 2s
+        enableExponentialBackoff: true
+        exponentialBackoffMultiplier: 2
+  timelimiter:
+    instances:
+      customerService:
+        timeoutDuration: 5s
+
+jwt:
+  secret: mySuperSecretKeyForJwtToken1234567890

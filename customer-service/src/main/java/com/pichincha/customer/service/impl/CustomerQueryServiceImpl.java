@@ -1,6 +1,6 @@
 package com.pichincha.customer.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.pichincha.customer.infrastructure.exception.CustomerNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.pichincha.common.infrastructure.input.adapter.rest.models.Customer;
@@ -14,17 +14,19 @@ import reactor.core.publisher.Mono;
 @Service
 public class CustomerQueryServiceImpl implements CustomerQueryService {
 
-  @Autowired
-  private CustomerRepository customerRepository;
-  
-  @Autowired
-  private CustomerMapper customerMapper;
+  private final CustomerRepository customerRepository;
+  private final CustomerMapper customerMapper;
+
+  public CustomerQueryServiceImpl(CustomerRepository customerRepository, CustomerMapper customerMapper) {
+    this.customerRepository = customerRepository;
+    this.customerMapper = customerMapper;
+  }
 
   @Override
   public Mono<Customer> getCustomerById(Integer id) {
     return customerRepository.findById(Long.valueOf(id))
         .map(customerMapper::toDto)
-        .switchIfEmpty(Mono.error(new RuntimeException("Customer not found")));
+        .switchIfEmpty(Mono.error(new CustomerNotFoundException("Customer with ID " + id + " not found")));
   }
 
   @Override

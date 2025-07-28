@@ -2,7 +2,6 @@ package com.pichincha.account.service.impl;
 
 import java.time.LocalDateTime;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pichincha.account.domain.AccountEntity;
@@ -16,11 +15,13 @@ import reactor.core.publisher.Mono;
 @Service
 public class AccountCommandServiceImpl implements AccountCommandService {
 
-	@Autowired
-	private AccountRepository accountRepository;
+  private final AccountRepository accountRepository;
+  private final AccountMapper accountMapper;
 
-	@Autowired
-	private AccountMapper accountMapper;
+  public AccountCommandServiceImpl(AccountRepository accountRepository, AccountMapper accountMapper) {
+    this.accountRepository = accountRepository;
+    this.accountMapper = accountMapper;
+  }
 
 	@Override
 	public Mono<AccountRequest> createAccount(Mono<AccountRequest> request) {

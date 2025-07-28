@@ -69,3 +69,5 @@ logging:
       resourceserver:
         jwt:
           issuer-uri: dummy
+jwt:
+  secret: mySuperSecretKeyForJwtToken1234567890

@@ -11,4 +11,6 @@ public interface AccountQueryService {
 
 	Flux<AccountRequest> getAllAccounts();
 
+	Flux<AccountRequest> getAccountByCustomerId(Integer customerId);
+
 }

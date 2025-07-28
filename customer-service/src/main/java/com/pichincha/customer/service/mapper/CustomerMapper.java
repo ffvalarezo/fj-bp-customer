@@ -23,6 +23,7 @@ public interface CustomerMapper {
   @Mapping(source = "name", target = "fullName")
   @Mapping(source = "phone", target = "celular")
   @Mapping(source = "status", target = "active")
+  @Mapping(source = "customerId", target = "id")
   Customer toDto(CustomerEntity entity);
 
   List<Customer> toDtoList(List<CustomerEntity> list);

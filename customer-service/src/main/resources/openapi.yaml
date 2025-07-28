@@ -301,6 +301,8 @@ components:
         - password
         - active
       properties:
+        id:
+          type: integer
         fullName:
           type: string
           example: Jose Lema

@@ -1,0 +1,130 @@
+import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
+
+plugins {
+    id 'jacoco'
+	id 'java'
+	id 'org.springframework.boot' version '3.5.3'
+    id 'io.spring.dependency-management' version '1.1.7'
+	id 'org.openapi.generator' version '7.9.0'
+} 
+
+def packageName = "com.pichincha.movement"
+
+springBoot {
+	mainClass = "${packageName}.OptimusApplication"
+}
+
+group = "com.pichincha.movement"
+version = "1.0.0"
+
+java {
+  sourceCompatibility = JavaVersion.VERSION_21
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(21)
+  }
+}
+
+bootJar {
+    archiveFileName = 'movement-service.jar'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    // Los repositorios se configuran en el build.gradle raíz en allprojects
+} 
+
+ext {
+}
+
+
+dependencies {
+    implementation project(':common-config')
+    
+    // MapStruct dependencies (necesarias para que se genere la implementación)
+    annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+    
+    // Test dependencies from common-config testFixtures
+    testImplementation testFixtures(project(':common-config'))
+    
+    // Additional test dependencies
+    testImplementation 'org.mockito:mockito-core'
+    testImplementation 'org.mockito:mockito-junit-jupiter'
+}
+ 
+
+tasks.register('optimusCreateUnitTest', JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = "com.pichincha.movement.core.ProcessMain"
+}
+
+compileJava {
+    dependsOn 'buildSpringServer'
+    options.compilerArgs += [
+            "-Amapstruct.suppressGeneratorTimestamp=true",
+            "-Amapstruct.suppressGeneratorVersionInfoComment=true",
+            "-Amapstruct.verbose=true",
+            "-Amapstruct.defaultComponentModel=spring",
+            '-Amapstruct.unmappedTargetPolicy=IGNORE'
+    ]
+}
+
+compileTestJava {
+    options.compilerArgs += [
+        '-Amapstruct.defaultComponentModel=spring',
+        '-Amapstruct.unmappedTargetPolicy=IGNORE'
+    ]
+}
+ 
+sourceSets.main.java.srcDirs = ["src/main/java", "build/generated/src/main/java"]
+
+springBoot{
+    buildInfo() 
+}
+
+test {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        xml.destination file("$buildDir/jacoco/test.xml")
+        html.destination file("$buildDir/jacoco/index.html")
+        html.required = true
+        csv.required = true
+    }
+}
+
+tasks.register('buildSpringServer', GenerateTask) {
+    generatorName = "spring"
+    inputSpec = "$rootDir/movement-service/src/main/resources/openapi.yaml".toString()
+    outputDir = "$buildDir/generated".toString()
+    apiPackage = "com.pichincha.common.infrastructure.input.adapter.rest"
+    modelPackage = "com.pichincha.common.infrastructure.input.adapter.rest.models"
+    library = "spring-boot"
+    configOptions = [
+        skipDefaultInterface                    : "true",
+        useSpringBoot3                          : "true",
+        useJakartaEe                            : "true",
+        serializableModel                       : "true",
+        dateLibrary                             : "java8",
+        openApiNullable                         : "false",
+        reactive                                : "true",
+        apiFirst                                : "false",
+        delegatePattern                         : "false",
+        configPackage                           : "com.pichincha.common.config",
+        sourceFolder                            : "src/main/java",
+        basePackage                             : "com.pichincha.common",
+        disallowAdditionalPropertiesIfNotPresent: "true",
+        interfaceOnly                           : "true"
+    ]
+}

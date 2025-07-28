@@ -1,0 +1,117 @@
+{
+  "info": {
+    "name": "MovementController API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create Movement",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "x-guid", "value": "123e4567-e89b-12d3-a456-426614174000", "type": "text" },
+          { "key": "x-channel", "value": "01", "type": "text" },
+          { "key": "x-medium", "value": "01", "type": "text" },
+          { "key": "x-app", "value": "12345", "type": "text" },
+          { "key": "x-session", "value": "test-session", "type": "text" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"movementId\": 1,\n  \"amount\": 100.0,\n  \"type\": \"DEPOSIT\",\n  \"date\": \"2025-07-22\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/movements",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["movements"]
+        }
+      }
+    },
+    {
+      "name": "Delete Movement",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          { "key": "x-guid", "value": "123e4567-e89b-12d3-a456-426614174000", "type": "text" },
+          { "key": "x-channel", "value": "01", "type": "text" },
+          { "key": "x-medium", "value": "01", "type": "text" },
+          { "key": "x-app", "value": "12345", "type": "text" },
+          { "key": "x-session", "value": "test-session", "type": "text" }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/movements/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["movements", "1"]
+        }
+      }
+    },
+    {
+      "name": "Get All Movements",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "x-guid", "value": "123e4567-e89b-12d3-a456-426614174000", "type": "text" },
+          { "key": "x-channel", "value": "01", "type": "text" },
+          { "key": "x-medium", "value": "01", "type": "text" },
+          { "key": "x-app", "value": "12345", "type": "text" },
+          { "key": "x-session", "value": "test-session", "type": "text" }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/movements",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["movements"]
+        }
+      }
+    },
+    {
+      "name": "Get Movement By ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "x-guid", "value": "123e4567-e89b-12d3-a456-426614174000", "type": "text" },
+          { "key": "x-channel", "value": "01", "type": "text" },
+          { "key": "x-medium", "value": "01", "type": "text" },
+          { "key": "x-app", "value": "12345", "type": "text" },
+          { "key": "x-session", "value": "test-session", "type": "text" }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/movements/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["movements", "1"]
+        }
+      }
+    },
+    {
+      "name": "Movements Report",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "x-guid", "value": "123e4567-e89b-12d3-a456-426614174000", "type": "text" },
+          { "key": "x-channel", "value": "01", "type": "text" },
+          { "key": "x-medium", "value": "01", "type": "text" },
+          { "key": "x-app", "value": "12345", "type": "text" },
+          { "key": "x-session", "value": "test-session", "type": "text" }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/movements/report?startDate=2025-07-01&endDate=2025-07-22&customerId=123",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["movements", "report"],
+          "query": [
+            { "key": "startDate", "value": "2025-07-01" },
+            { "key": "endDate", "value": "2025-07-22" },
+            { "key": "customerId", "value": "123" }
+          ]
+        }
+      }
+    }
+  ]
+}

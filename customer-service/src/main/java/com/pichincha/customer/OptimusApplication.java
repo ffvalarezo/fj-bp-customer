@@ -8,8 +8,8 @@ import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 @EnableR2dbcRepositories(basePackages = "com.pichincha.customer.repository")
 public class OptimusApplication {
 
-  public static void main(String[] args) {
-    SpringApplication.run(OptimusApplication.class, args);
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(OptimusApplication.class, args);
+    }
 
 }

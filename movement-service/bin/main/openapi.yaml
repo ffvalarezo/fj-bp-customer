@@ -1,0 +1,313 @@
+openapi: 3.0.3
+info:
+  title: Movement API
+  version: 1.0.0
+  description: API for managing account movements and generating reports.
+servers:
+  - url: http://localhost:8082/api/v1/movements
+tags:
+  - name: Movements
+security:
+  - bearerAuth: []  
+paths:
+  /movements:
+    get:
+      tags: [Movements]
+      summary: Get all movements
+      operationId: getAllMovements
+      parameters:
+        - $ref: '#/components/parameters/GuidHeader'
+        - $ref: '#/components/parameters/ChannelHeader'
+        - $ref: '#/components/parameters/MediumHeader'
+        - $ref: '#/components/parameters/AppHeader'
+        - $ref: '#/components/parameters/SessionHeader'
+      responses:
+        '200':
+          description: List of movements
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MovementResponse'
+    post:
+      tags: [Movements]
+      summary: Create a movement (CREDIT/DEBIT)
+      operationId: createMovement
+      parameters:
+        - $ref: '#/components/parameters/GuidHeader'
+        - $ref: '#/components/parameters/ChannelHeader'
+        - $ref: '#/components/parameters/MediumHeader'
+        - $ref: '#/components/parameters/AppHeader'
+        - $ref: '#/components/parameters/SessionHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MovementRequest'
+      responses:
+        '201':
+          description: Movement created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovementResponse'
+        '400':
+          description: Invalid input or insufficient balance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /movements/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags: [Movements]
+      summary: Get movement by ID
+      operationId: getMovementById
+      parameters:
+        - $ref: '#/components/parameters/GuidHeader'
+        - $ref: '#/components/parameters/ChannelHeader'
+        - $ref: '#/components/parameters/MediumHeader'
+        - $ref: '#/components/parameters/AppHeader'
+        - $ref: '#/components/parameters/SessionHeader'
+      responses:
+        '200':
+          description: Movement details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovementResponse'
+        '404':
+          description: Movement not found
+    delete:
+      tags: [Movements]
+      summary: Delete a movement by ID
+      operationId: deleteMovement
+      parameters:
+        - $ref: '#/components/parameters/GuidHeader'
+        - $ref: '#/components/parameters/ChannelHeader'
+        - $ref: '#/components/parameters/MediumHeader'
+        - $ref: '#/components/parameters/AppHeader'
+        - $ref: '#/components/parameters/SessionHeader'
+      responses:
+        '204':
+          description: Movement deleted
+        '404':
+          description: Movement not found
+  /movements/report:
+    get:
+      tags: [Movements]
+      summary: Get movement report by date range and customer ID
+      parameters:
+        - name: startDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: customerId
+          in: query
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/GuidHeader'
+        - $ref: '#/components/parameters/ChannelHeader'
+        - $ref: '#/components/parameters/MediumHeader'
+        - $ref: '#/components/parameters/AppHeader'
+        - $ref: '#/components/parameters/SessionHeader'
+      responses:
+        '200':
+          description: Movement report
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportResponse'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    GuidHeader:
+      name: x-guid
+      in: header
+      required: true
+      schema:
+        type: string
+        maxLength: 60
+        pattern: '^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$'
+    ChannelHeader:
+      name: x-channel
+      in: header
+      required: true
+      schema:
+        type: string
+        maxLength: 2
+        pattern: '^\d+$'
+    MediumHeader:
+      name: x-medium
+      in: header
+      required: true
+      schema:
+        type: string
+        maxLength: 2
+        pattern: '^\d+$'
+    AppHeader:
+      name: x-app
+      in: header
+      required: true
+      schema:
+        type: string
+        maxLength: 5
+        pattern: '^\d+$'
+    SessionHeader:
+      name: x-session
+      in: header
+      required: true
+      schema:
+        type: string
+        maxLength: 100
+  schemas:
+    MovementRequest:
+      type: object
+      required:
+        - accountNumber
+        - type
+        - value
+      properties:
+        accountNumber:
+          type: string
+        type:
+          type: string
+          enum: [CREDIT, DEBIT]
+        value:
+          type: number
+          format: double
+          minimum: 0.01
+    MovementResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        accountNumber:
+          type: string
+        type:
+          type: string
+        value:
+          type: number
+        balance:
+          type: number
+        date:
+          type: string
+          format: date-time
+    ReportResponse:
+      type: object
+      properties:
+        customer:
+          $ref: '#/components/schemas/Customer'
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountRequest'
+        movements:
+          type: array
+          items:
+            $ref: '#/components/schemas/MovementResponse'
+        summary:
+          type: object
+          properties:
+            totalCredits:
+              type: number
+            totalDebits:
+              type: number
+        pdfBase64:
+          type: string
+          description: PDF report encoded in base64
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+    Customer:
+      type: object
+      required:
+        - fullName
+        - gender
+        - age
+        - identification
+        - address
+        - celular
+        - email
+        - password
+        - active
+      properties:
+        id:
+          type: integer
+        fullName:
+          type: string
+          example: Jose Lema
+        gender:
+          type: string
+          example: Male
+        age:
+          type: integer
+          minimum: 18
+          example: 35
+        identification:
+          type: string
+          pattern: '^\d{1,10}$'
+          example: "1234567890"
+        address:
+          type: string
+          example: Otavalo st and principal
+        celular:
+          type: string
+          pattern: '^\d{10}$'
+          example: "0982547852"
+        email:
+          type: string
+          format: email
+          example: "jose.lema@example.com"
+        customerId:
+          type: integer
+          readOnly: true
+          example: 1
+        password:
+          type: string
+          example: "1234"
+        active:
+          type: boolean
+          example: true
+    AccountRequest:
+      type: object
+      properties:
+        accountNumber:
+          type: string
+        accountType:
+          type: string
+          enum: [SAVINGS, CURRENT]
+        initialBalance:
+          type: number
+        status:
+          type: boolean
+        customerId:
+          type: string
+      required: [accountNumber, accountType, initialBalance, status, customerId]

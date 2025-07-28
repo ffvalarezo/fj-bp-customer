@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
-import com.pichincha.common.exception.LogException;
-
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -22,8 +20,8 @@ public class GlobalExceptionHandler {
 	private static final String DOMAIN_HOME = "http://localhost";
 	private static final String CONTEXT = "/customer";
 
-	@ExceptionHandler(LogException.class)
-	public ResponseEntity<Object> handleForbiddenException(LogException ex, WebRequest request) {
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<Object> handleForbiddenException(Exception ex, WebRequest request) {
 		Map<String, Object> data = configProperties.getValuesErrorCatalogByKey("newException");
 
 		CustomProblemDetail problemDetail = getProblemDetail(data.get("title").toString(), ex.getMessage(), DOMAIN_HOME,

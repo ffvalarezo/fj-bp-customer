@@ -4,36 +4,81 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
-import com.pichincha.common.exception.LogException;
-
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-	@Autowired
-	private ConfigPropertiesErrorCatalog configProperties;
+	private final ConfigPropertiesErrorCatalog configProperties;
+	
+	public GlobalExceptionHandler(ConfigPropertiesErrorCatalog configProperties) {
+		this.configProperties = configProperties;
+	}
 
 	private static final String DOMAIN_HOME = "http://localhost";
 	private static final String CONTEXT = "/customer";
 
-	@ExceptionHandler(LogException.class)
-	public ResponseEntity<Object> handleForbiddenException(LogException ex, WebRequest request) {
-		Map<String, Object> data = configProperties.getValuesErrorCatalogByKey("newException");
+	@ExceptionHandler(CustomerNotFoundException.class)
+	public ResponseEntity<Object> handleCustomerNotFoundException(
+			CustomerNotFoundException exception, WebRequest request) {
+		
+		Map<String, Object> data = configProperties.getValuesErrorCatalogByKey("notFoundException");
 
-		CustomProblemDetail problemDetail = getProblemDetail(data.get("title").toString(), ex.getMessage(), DOMAIN_HOME,
-				CONTEXT, data.get("resource").toString(), data.get("component").toString(),
-				data.get("backend").toString());
+		CustomProblemDetail problemDetail = getProblemDetail(
+			data.get("title").toString(), 
+			exception.getMessage(), 
+			DOMAIN_HOME, CONTEXT, 
+			data.get("resource").toString(), 
+			data.get("component").toString(),
+			data.get("backend").toString());
 
 		List<ErrorDetail> allErrorDetailByKey = getAllErrorDetailByKey(data);
 		problemDetail.setErrors(allErrorDetailByKey);
 
-		return new ResponseEntity<>(problemDetail, HttpStatus.FORBIDDEN);
+		return new ResponseEntity<>(problemDetail, HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(CustomerValidationException.class)
+	public ResponseEntity<Object> handleCustomerValidationException(
+			CustomerValidationException exception, WebRequest request) {
+		
+		Map<String, Object> data = configProperties.getValuesErrorCatalogByKey("validationException");
+
+		CustomProblemDetail problemDetail = getProblemDetail(
+			data.get("title").toString(), 
+			exception.getMessage(), 
+			DOMAIN_HOME, CONTEXT, 
+			data.get("resource").toString(), 
+			data.get("component").toString(),
+			data.get("backend").toString());
+
+		List<ErrorDetail> allErrorDetailByKey = getAllErrorDetailByKey(data);
+		problemDetail.setErrors(allErrorDetailByKey);
+
+		return new ResponseEntity<>(problemDetail, HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<Object> handleGenericException(Exception exception, WebRequest request) {
+		
+		Map<String, Object> data = configProperties.getValuesErrorCatalogByKey("internalServerError");
+
+		CustomProblemDetail problemDetail = getProblemDetail(
+			"Internal Server Error", 
+			"An unexpected error occurred", 
+			DOMAIN_HOME, CONTEXT, 
+			data.get("resource").toString(), 
+			data.get("component").toString(),
+			data.get("backend").toString());
+
+		List<ErrorDetail> allErrorDetailByKey = getAllErrorDetailByKey(data);
+		problemDetail.setErrors(allErrorDetailByKey);
+
+		return new ResponseEntity<>(problemDetail, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	private CustomProblemDetail getProblemDetail(String title, String detail, String instance, String type,

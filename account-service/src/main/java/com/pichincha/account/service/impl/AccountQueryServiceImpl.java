@@ -1,6 +1,5 @@
 package com.pichincha.account.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pichincha.account.repository.AccountRepository;
@@ -14,11 +13,13 @@ import reactor.core.publisher.Mono;
 @Service
 public class AccountQueryServiceImpl implements AccountQueryService {
 
-	@Autowired
-	private AccountRepository accountRepository;
+  private final AccountRepository accountRepository;
+  private final AccountMapper accountMapper;
 
-	@Autowired
-	private AccountMapper accountMapper;
+  public AccountQueryServiceImpl(AccountRepository accountRepository, AccountMapper accountMapper) {
+    this.accountRepository = accountRepository;
+    this.accountMapper = accountMapper;
+  }
 
 	@Override
 	public Mono<AccountRequest> getAccountById(Integer id) {
@@ -30,4 +31,10 @@ public class AccountQueryServiceImpl implements AccountQueryService {
 	public Flux<AccountRequest> getAllAccounts() {
 		return accountRepository.findAll().map(accountMapper::toDto);
 	}
+
+	@Override
+	public Flux<AccountRequest> getAccountByCustomerId(Integer customerId) {
+		return accountRepository.findByCustomerId(Long.valueOf(customerId)).map(accountMapper::toDto);
+	}
+
 }
