@@ -1,0 +1,12 @@
+<app-header [loggedUser]="userInfo" (onClickCloseSession)="onCloseSession()">
+</app-header>
+
+<div class="fullpage-layout">
+  <app-sidebar [menuItems]="menuItems" (clickMenuItem)="handleClickMenuItem($event)"></app-sidebar>
+  <div class="fullpage-layout__content">
+    <div class="fullpage-layout__content-wrapper">
+      <router-outlet></router-outlet>
+    </div>
+    <app-footer></app-footer>
+  </div>
+</div>

@@ -1,0 +1,51 @@
+<div class="list-items">
+  <header class="list-items__title">
+    <pichincha-typography
+      variant="prelo-slab"
+      color="bp-primary-blue500"
+      weight="400"
+      size="32px"
+      category="h1"
+    >
+      Listado de Productos
+    </pichincha-typography>
+  </header>
+
+  <section>
+    <div class="list-items__buttons">
+      <pichincha-button
+        size="large"
+        id="button"
+        customWidth="200px"
+        label="Nuevo Producto"
+        (click)="handleCreateANewItem()"
+      ></pichincha-button>
+    </div>
+
+    <div class="list-items__main-container">
+      @if (loadingData()) {
+      <div class="list-items__loading">
+        <pichincha-loading-screen
+          description="Cargando los datos, espera un momento ... "
+          [isDesktop]="false"
+          [fitToParent]="true"
+        >
+        </pichincha-loading-screen>
+      </div>
+      } @else {
+      <pichincha-selector-favorite-list
+        [hideHeader]="true"
+        [items]="items()"
+        (clickMainButtonItem)="handleClickItem($event)"
+      ></pichincha-selector-favorite-list>
+      }
+    </div>
+  </section>
+  <app-modal-list-item
+    [openModal]="openModal()"
+    [idItem]="idItem()"
+    (onClickEdit)="handleClickEdit()"
+    (onClickDelete)="handleClickDelete()"
+    (onCloseModal)="handleCloseModal()"
+  ></app-modal-list-item>
+</div>

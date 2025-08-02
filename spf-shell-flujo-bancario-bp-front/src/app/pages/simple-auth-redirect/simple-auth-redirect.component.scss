@@ -1,0 +1,16 @@
+.page-full {
+  min-height: 100vh;
+  padding: 0 20px;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+
+  &__text-info {
+    margin: 40px 0 20px 0;
+  }
+
+  pichincha-button {
+    width: 150px;
+  }
+}

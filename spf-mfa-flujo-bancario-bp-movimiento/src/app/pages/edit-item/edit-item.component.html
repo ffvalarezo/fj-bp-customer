@@ -1,0 +1,88 @@
+<div class="edit-item">
+  <header class="edit-item__title">
+    <pichincha-typography
+      variant="prelo-slab"
+      color="bp-primary-blue500"
+      weight="400"
+      size="32px"
+      category="h1"
+    >
+    {{ editForm() ? "Editar" : "Registar" }} Producto
+    </pichincha-typography>
+  </header>
+
+  <section class="edit-item__container-form">
+
+    <form
+      id="registerOnboardingForm"
+      style="width: 500px"
+      [formGroup]="registerForm"
+      class="edit-item__form"
+    >
+      <pichincha-input
+        id="inputTitle"
+        label="Titulo"
+        formControlName="title"
+        placeholder="Ej: iPhone 14"
+        state="{{ title.invalid && title.touched ? 'error' : undefined }}"
+        errorHelper="Campo requerido"
+      ></pichincha-input>
+    
+      <pichincha-input
+        label="Descripción"
+        formControlName="description"
+        placeholder="Ej: An apple mobile which is nothing like apple"
+        state="{{
+          description.invalid && description.touched ? 'error' : undefined
+        }}"
+        errorHelper="Campo requerido"
+      ></pichincha-input>
+    
+      <pichincha-input
+        label="Price"
+        formControlName="price"
+        placeholder="Ej: 15.50"
+        state="{{ price.invalid && price.touched ? 'error' : undefined }}"
+        errorHelper="Campo requerido"
+      ></pichincha-input>
+    
+      <pichincha-input
+        label="Discount Percentage"
+        formControlName="discountPercentage"
+        placeholder="Ej: 8.71"
+        state="{{
+          discountPercentage.invalid && discountPercentage.touched
+            ? 'error'
+            : undefined
+        }}"
+        errorHelper="Campo requerido"
+      ></pichincha-input>
+    
+      <pichincha-input
+        label="Stock"
+        formControlName="stock"
+        placeholder="Ej: 100"
+        state="{{ stock.invalid && stock.touched ? 'error' : undefined }}"
+        errorHelper="Campo requerido"
+      ></pichincha-input>
+    
+      <div class="edit-item__buttons">
+        <pichincha-button
+          (clickEvent)="resetForm()"
+          size="large"
+          variant="secondary"
+          customWidth="200px"
+          label="Cancelar"
+        ></pichincha-button>
+        <pichincha-button
+          (clickEvent)="onSubmit()"
+          size="large"
+          customWidth="200px"
+          label="{{ editForm() ? 'Editar' : 'Registar' }}"
+        ></pichincha-button>
+      </div>
+    </form>
+
+  </section>
+
+</div>

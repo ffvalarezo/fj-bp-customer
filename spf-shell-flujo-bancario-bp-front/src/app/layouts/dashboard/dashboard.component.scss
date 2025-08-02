@@ -1,0 +1,35 @@
+// Dashboard Layout - Estructura completa con header, sidebar y footer
+.dashboard-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+  
+  app-sidebar {
+    width: 250px;
+    flex-shrink: 0;
+  }
+  
+  .content-area {
+    flex: 1;
+    padding: 1rem;
+    background-color: #ffffff;
+    overflow-y: auto;
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .main-content {
+    flex-direction: column;
+    
+    app-sidebar {
+      width: 100%;
+      order: -1;
+    }
+  }
+}

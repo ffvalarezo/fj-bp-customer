@@ -1,0 +1,40 @@
+<pichincha-modal-dialog
+  show-footer="false"
+  show-header="false"
+  [open]="openModal()"
+  (closeModalEvent)="handleCloseModal()"
+>
+  <div class="modal-dialog__header">
+    <pichincha-typography  size="16px">
+      {{
+        isOptionList()
+          ? "Selecciona una opción"
+          : "¿Estás seguro de eliminar este producto?"
+      }}
+    </pichincha-typography>
+    <pichincha-typography variant="prelo" weight="600" size="12px" lineHeight="1">
+      Producto {{ idItem() }}
+      </pichincha-typography
+    >
+  </div>
+
+  @if (isOptionList()) {
+  <pichincha-selector-list-card
+    variant="options"
+    [options]="modalOptions"
+    (clickListCardItem)="handleClickOptionList($event)"
+  ></pichincha-selector-list-card>
+  } @else {
+  <pichincha-cta-section
+    [primaryButton]="{
+        label: 'Aceptar',
+      }"
+    [secondaryButton]="{
+        variant: 'secondary',
+        label: 'Cancelar',
+      }"
+      (clickPrimaryButton)="handleClickCTASection(true)"
+      (clickSecondaryButton)="handleClickCTASection()"
+  ></pichincha-cta-section>
+  }
+</pichincha-modal-dialog>

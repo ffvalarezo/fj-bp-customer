@@ -51,7 +51,7 @@ dependencies {
     runtimeOnly 'io.r2dbc:r2dbc-h2'
     
     // Pichincha Framework
-    //api 'com.pichincha.common:lib-transactional-log-webflux-sb3:1.8.0'
+    api 'com.pichincha.common:lib-transactional-log-webflux-sb3:1.7.4'
 	
     // YAML processing
     api 'org.yaml:snakeyaml:2.0'

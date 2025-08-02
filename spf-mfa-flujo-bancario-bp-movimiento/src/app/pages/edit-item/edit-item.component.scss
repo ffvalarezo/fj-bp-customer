@@ -1,0 +1,33 @@
+.edit-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 20px;
+  margin: auto;
+  max-width: 800px;
+
+  &__title {
+    margin: 32px 0px;
+  }
+
+  &__container-form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 32px;
+    margin: auto;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+
+  &__buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 32px;
+    gap: 8px;
+  }
+}

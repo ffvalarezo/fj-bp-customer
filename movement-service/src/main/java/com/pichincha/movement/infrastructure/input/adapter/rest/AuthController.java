@@ -1,5 +1,6 @@
 package com.pichincha.movement.infrastructure.input.adapter.rest;
 
+import com.pichincha.movement.domain.LoginResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,6 +17,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -42,14 +44,24 @@ public class AuthController {
 	}
 
 	@PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public Mono<String> login(@RequestBody Map<String, String> credentials) {
+	public Mono<LoginResponse> login(@RequestBody Map<String, String> credentials) {
 		String username = credentials.get("username");
 		String password = credentials.get("password");
 		if (username.equals(this.username) && password.equals(this.password)) {
 			String token = Jwts.builder().setSubject(username).claim("roles", "ROLE_ADMIN").setIssuedAt(new Date())
 					.setExpiration(new Date(System.currentTimeMillis() + 3600000))
 					.signWith(Keys.hmacShaKeyFor(jwtSecret.getBytes()), SignatureAlgorithm.HS256).compact();
-			return Mono.just(token);
+
+			String refreshToken = Jwts.builder().setSubject(username).setIssuedAt(new Date())
+					.setExpiration(new Date(System.currentTimeMillis() + 7200000))
+					.signWith(Keys.hmacShaKeyFor(jwtSecret.getBytes()), SignatureAlgorithm.HS256).compact();
+
+			Map<String, Object> user = new HashMap<>();
+			user.put("username", username);
+			user.put("roles", "ROLE_ADMIN");
+
+			LoginResponse response = new LoginResponse(token, refreshToken, 3600, user);
+			return Mono.just(response);
 		}
 		return Mono.error(new RuntimeException("Invalid credentials"));
 	}
