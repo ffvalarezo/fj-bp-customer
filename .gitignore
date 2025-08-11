@@ -161,4 +161,11 @@ buildNumber.properties
 
 # "temporary" build files
 /target
-.angular/
+
+
+**/.angular/
+**/node_modules/
+**/dist/
+**/build/
+**/coverage/
+*.log
