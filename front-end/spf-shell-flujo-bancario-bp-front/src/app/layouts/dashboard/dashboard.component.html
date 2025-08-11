@@ -1,0 +1,20 @@
+<div class="dashboard-layout">
+  <!-- Header Principal -->
+  <app-header [loggedUser]="userInfo"></app-header>
+
+  <div class="main-content">
+    <!-- Sidebar -->
+    <app-sidebar
+      [menuItems]="menuItems"
+      (clickMenuItem)="handleClickMenuItem($event)"
+    ></app-sidebar>
+
+    <!-- Contenido Principal -->
+    <main class="content-area">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <app-footer></app-footer>
+</div>

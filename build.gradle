@@ -25,7 +25,7 @@ allprojects {
             name "BancoPichinchaEC"
             credentials {
                 username "BancoPichinchaEC"//System.getenv("ARTIFACT_USERNAME")
-                password "7ABpCdyDwD5Ln8MNl7vbjy51LKcZFSAX1HOYYnouWk48gJFz0LlpJQQJ99BGACAAAAAihC6zAAASAZDO3Feo"//System.getenv("ARTIFACT_TOKEN")
+                password "CTgRq5qmJD87qZJNAP96mrWMN4iEEiTg2Y01QIht3KPBWiI6X9DJJQQJ99BHACAAAAAihC6zAAASAZDO14jQ"//System.getenv("ARTIFACT_TOKEN")
             }
         }
 

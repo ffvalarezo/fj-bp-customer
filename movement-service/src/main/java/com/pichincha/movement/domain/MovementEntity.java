@@ -27,9 +27,6 @@ public class MovementEntity {
 	@Column("movement_id")
 	private Long id;
 
-	@Column("movement_date")
-	private LocalDateTime date;
-
 	@Enumerated(EnumType.STRING)
 	@Column("movement_type")
 	private MovementType movementType;
@@ -37,7 +34,7 @@ public class MovementEntity {
 	@Column("movement_value")
 	private BigDecimal value;
 
-	@Column("balance")
+	@Column("movement_balance")
 	private BigDecimal balance;
 
 	@Column("account_number")

@@ -1,0 +1,57 @@
+<div class="edit-item">
+  <header class="edit-item__title">
+    <pichincha-typography variant="prelo-slab" color="bp-primary-blue500" weight="400" size="32px" category="h1">
+      {{ editForm() ? "Editar" : "Registar" }} Movimiento
+    </pichincha-typography>
+  </header>
+  <section class="edit-item__container-form">
+    <form *ngIf="!editForm()" id="movementForm" style="width: 500px; margin-top: 32px" [formGroup]="registerForm"
+      class="edit-item__form">
+      <pichincha-typography variant="prelo-slab" color="bp-primary-blue500" weight="400" size="24px" category="h2">
+        Transferir
+      </pichincha-typography>
+
+
+      <pichincha-input-message *ngIf="formErrorMessage" state="error" errorMessage="Mensaje"
+        [infoMessage]="formErrorMessage">
+      </pichincha-input-message>
+
+      <pichincha-typography variant="prelo" color="bp-primary-blue500" weight="400" size="20px">
+        Cliente: {{customerResponse()?.fullName}}
+      </pichincha-typography>
+
+      <pichincha-detail-item-list item-title="Cuenta origen:" description="{{ accountResponse()?.accountNumber }}"
+        variant="main">
+      </pichincha-detail-item-list>
+      <pichincha-typography variant="prelo" color="bp-primary-blue500" weight="400" size="16px">
+        Tipo: {{ accountResponse()?.accountType === 'SAVINGS' ? 'Ahorros' :
+        accountResponse()?.accountType === 'CURRENT' ? 'Corriente' : accountResponse()?.accountType }}
+      </pichincha-typography>
+      <pichincha-typography variant="prelo" color="bp-primary-blue500" weight="400" size="16px">
+        Saldo actual: {{ accountResponse()?.initialBalance | currency }}
+      </pichincha-typography>
+      <pichincha-dropdown [state]="state" [size]="size" [placeholder]="placeholder" [label]="label" [tooltip]="tooltip"
+        [items]="items" [valueSelected]="accountNumber" (clickedItem)="handleClickedItem($event)"></pichincha-dropdown>
+
+      <pichincha-input label="Valor a transferir" formControlName="value" type="number" step="0.01"
+        placeholder="Ej: 1000.00" [state]="
+          value.invalid && value.touched ? 'error' : undefined
+        " [errorHelper]="
+          value.hasError('required')
+            ? 'Campo requerido'
+            : value.hasError('min')
+            ? 'El saldo debe ser mayor o igual a 0'
+            : ''
+        ">
+      </pichincha-input>
+    </form>
+    <div class="edit-item__buttons" style="margin-top: 32px">
+      <pichincha-button (clickEvent)="resetForm()" size="large" variant="secondary" customWidth="200px"
+        label="Cancelar">
+      </pichincha-button>
+      <pichincha-button (clickEvent)="onSubmit()" size="large" customWidth="200px"
+        [disabled]="(!editForm() && registerForm.invalid)" label="{{ editForm() ? 'Editar' : 'Registrar' }}">
+      </pichincha-button>
+    </div>
+  </section>
+</div>

@@ -44,6 +44,12 @@ public class AccountController implements AccountsApi {
 	}
 
 	@Override
+	public Mono<ResponseEntity<Flux<AccountRequest>>> getAccountsByAccountNumber(String accountNumber, String xGuid,
+			String xChannel, String xMedium, String xApp, String xSession, ServerWebExchange exchange) {
+        return Mono.just(ResponseEntity.ok(queryService.getAccountByAccountNumber(accountNumber)));
+	}
+
+	@Override
 	public Mono<ResponseEntity<Flux<AccountRequest>>> getAccountsByCustomerId(Integer customerId, String xGuid,
 			String xChannel, String xMedium, String xApp, String xSession, ServerWebExchange exchange) {
 		return Mono.just(ResponseEntity.ok(queryService.getAccountByCustomerId(customerId)));

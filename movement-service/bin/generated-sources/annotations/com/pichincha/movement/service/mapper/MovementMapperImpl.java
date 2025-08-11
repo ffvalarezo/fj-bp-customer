@@ -25,6 +25,9 @@ public class MovementMapperImpl implements MovementMapper {
         MovementEntity movementEntity = new MovementEntity();
 
         movementEntity.setAccountNumber( dto.getAccountNumber() );
+        if ( dto.getBalance() != null ) {
+            movementEntity.setBalance( BigDecimal.valueOf( dto.getBalance() ) );
+        }
         if ( dto.getValue() != null ) {
             movementEntity.setValue( BigDecimal.valueOf( dto.getValue() ) );
         }
@@ -40,16 +43,16 @@ public class MovementMapperImpl implements MovementMapper {
 
         MovementResponse movementResponse = new MovementResponse();
 
-        movementResponse.setDate( localDateTimeToOffsetDateTime( entity.getDate() ) );
+        movementResponse.setDate( localDateTimeToOffsetDateTime( entity.getCreatedAt() ) );
         if ( entity.getMovementType() != null ) {
-            movementResponse.type( entity.getMovementType().name() );
+            movementResponse.setType( entity.getMovementType().name() );
         }
-        movementResponse.setAccountNumber( entity.getAccountNumber() );
-        movementResponse.setBalance( entity.getBalance() );
         if ( entity.getId() != null ) {
             movementResponse.setId( String.valueOf( entity.getId() ) );
         }
-        movementResponse.value( entity.getValue() );
+        movementResponse.setAccountNumber( entity.getAccountNumber() );
+        movementResponse.setValue( entity.getValue() );
+        movementResponse.setBalance( entity.getBalance() );
 
         return movementResponse;
     }
@@ -76,6 +79,9 @@ public class MovementMapperImpl implements MovementMapper {
 
         if ( dto.getAccountNumber() != null ) {
             entity.setAccountNumber( dto.getAccountNumber() );
+        }
+        if ( dto.getBalance() != null ) {
+            entity.setBalance( BigDecimal.valueOf( dto.getBalance() ) );
         }
         if ( dto.getValue() != null ) {
             entity.setValue( BigDecimal.valueOf( dto.getValue() ) );

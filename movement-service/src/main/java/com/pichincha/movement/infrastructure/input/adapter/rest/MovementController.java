@@ -58,6 +58,14 @@ public class MovementController implements MovementsApi {
 	}
 
 	@Override
+	public Mono<ResponseEntity<Flux<MovementResponse>>> getMovementByAccountNumber(String accountNumber, String xGuid,
+			String xChannel, String xMedium, String xApp, String xSession, ServerWebExchange exchange) {
+		LocalDate endDate = LocalDate.now();
+		LocalDate startDate = endDate.minusDays(30);
+		return Mono.just(ResponseEntity.ok(queryService.getMovementsByAccountNumber(accountNumber, startDate, endDate)));
+	}
+
+	@Override
 	public Mono<ResponseEntity<MovementResponse>> getMovementById(Integer id, String xGuid, String xChannel,
 			String xMedium, String xApp, String xSession, ServerWebExchange exchange) {
 		return queryService.getMovementById(id).map(ResponseEntity::ok);

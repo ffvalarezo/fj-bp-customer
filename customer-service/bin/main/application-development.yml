@@ -1,13 +1,18 @@
 spring:
   # Database configuration for development (H2 in-memory)
   r2dbc:
-    url: r2dbc:h2:mem:///testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    username: sa
-    password: password
+    #url: r2dbc:h2:mem:///testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: r2dbc:postgresql://localhost:5432/bank_db
+    #username: sa
+    username: postgres
+    #password: password
+    password: pgadmin
+    driver-class-name: org.postgresql.Driver
     pool:
       initial-size: 2
       max-size: 5
       max-idle-time: 10m
+      enabled: true
   h2:
     console:
       enabled: true
@@ -36,7 +41,11 @@ spring:
           ms: 2000
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer  
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: account-sync-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 logging:
   level:
     org:
@@ -53,6 +62,7 @@ logging:
       enabled: true
       topic:
         name: ${KAFKA_TOPIC:dev-transactional-log}
+        accountSync: ${KAFKA_ACCOUNT_SYNC_TOPIC:dev-account-sync}
     tracer:
       enabled: true
       exclusion:
@@ -99,3 +109,10 @@ resilience4j:
 
 jwt:
   secret: mySuperSecretKeyForJwtToken1234567890
+app:
+  features:
+    events: false
+
+external:
+  account-service:
+    url: http://localhost:8082

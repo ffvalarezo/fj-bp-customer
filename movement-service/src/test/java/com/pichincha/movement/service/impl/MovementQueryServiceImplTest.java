@@ -48,11 +48,10 @@ class MovementQueryServiceImplTest {
 		LocalDate endDate = LocalDate.of(2022, 2, 28);
 		MovementEntity movement = new MovementEntity();
 		movement.setId(1L);
-		movement.setDate(LocalDateTime.now());
 		movement.setBalance(BigDecimal.valueOf(100.0));
 		movement.setAccountNumber("1234567890");
 		movement.setMovementType(MovementType.DEBIT);
-		movement.setDate(LocalDateTime.of(2022, 2, 10, 10, 0));
+		movement.setCreatedAt(LocalDateTime.of(2022, 2, 10, 10, 0));
 
 		MovementResponse expectedResponse = new MovementResponse();
 		expectedResponse.setDate(LocalDateTime.now().atOffset(ZoneOffset.UTC));

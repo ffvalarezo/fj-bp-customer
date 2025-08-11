@@ -27,6 +27,9 @@ public class AccountMapperImpl implements AccountMapper {
         if ( dto.getCustomerId() != null ) {
             accountEntity.setCustomerId( dto.getCustomerId().longValue() );
         }
+        if ( dto.getId() != null ) {
+            accountEntity.setId( dto.getId().longValue() );
+        }
         accountEntity.setInitialBalance( dto.getInitialBalance() );
         accountEntity.setStatus( dto.getStatus() );
 
@@ -41,6 +44,9 @@ public class AccountMapperImpl implements AccountMapper {
 
         AccountRequest accountRequest = new AccountRequest();
 
+        if ( entity.getId() != null ) {
+            accountRequest.setId( entity.getId().intValue() );
+        }
         accountRequest.setAccountNumber( entity.getAccountNumber() );
         accountRequest.setAccountType( accountTypeToAccountTypeEnum( entity.getAccountType() ) );
         accountRequest.setInitialBalance( entity.getInitialBalance() );
@@ -80,6 +86,9 @@ public class AccountMapperImpl implements AccountMapper {
         }
         if ( dto.getCustomerId() != null ) {
             entity.setCustomerId( dto.getCustomerId().longValue() );
+        }
+        if ( dto.getId() != null ) {
+            entity.setId( dto.getId().longValue() );
         }
         if ( dto.getInitialBalance() != null ) {
             entity.setInitialBalance( dto.getInitialBalance() );

@@ -100,6 +100,34 @@ paths:
           description: Movement deleted
         '404':
           description: Movement not found
+  /movements/account/{accountNumber}:
+    parameters:
+      - name: accountNumber
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags: [Movements]
+      summary: Get movement by ID
+      operationId: getMovementByAccountNumber
+      parameters:
+        - $ref: '#/components/parameters/GuidHeader'
+        - $ref: '#/components/parameters/ChannelHeader'
+        - $ref: '#/components/parameters/MediumHeader'
+        - $ref: '#/components/parameters/AppHeader'
+        - $ref: '#/components/parameters/SessionHeader'
+      responses:
+        '200':
+          description: List of movements
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MovementResponse'
+        '404':
+          description: Movement not found
   /movements/report:
     get:
       tags: [Movements]
@@ -194,6 +222,10 @@ components:
           type: string
           enum: [CREDIT, DEBIT]
         value:
+          type: number
+          format: double
+          minimum: 0.01
+        balance:
           type: number
           format: double
           minimum: 0.01

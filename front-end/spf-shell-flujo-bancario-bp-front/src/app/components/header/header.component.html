@@ -1,0 +1,39 @@
+<header class="app-header">
+  <!-- Barra de navegación personalizada -->
+  <nav class="main-navigation">
+    <div class="nav-brand">
+      <img src="assets/logo-bp.svg" alt="Banco Pichincha" class="logo" />
+    </div>
+
+    <ul class="nav-items">
+      <li
+        *ngFor="let item of navigationItems; let i = index"
+        [class.active]="item.active"
+        class="nav-item"
+      >
+        <button
+          type="button"
+          class="nav-button"
+          (click)="navigateToItem(item, i)"
+          [attr.aria-label]="'Navegar a ' + item.label"
+        >
+          <span class="nav-label">{{ item.label }}</span>
+        </button>
+      </li>
+    </ul>
+
+    <div class="user-section" *ngIf="isAuthenticated && currentUser">
+      <div class="user-info">
+        <span class="user-name">{{ currentUser.name }}</span>
+      </div>
+      <button
+        type="button"
+        class="logout-button"
+        (click)="handleCloseSession()"
+        aria-label="Cerrar sesión"
+      >
+        Cerrar Sesión
+      </button>
+    </div>
+  </nav>
+</header>

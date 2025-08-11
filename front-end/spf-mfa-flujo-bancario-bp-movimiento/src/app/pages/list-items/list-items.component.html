@@ -1,0 +1,57 @@
+<div class="list-items">
+  <header class="list-items__title">
+    <pichincha-typography variant="prelo-slab" color="bp-primary-blue500" weight="400" size="32px" category="h1">
+      Listado de Cuentas
+    </pichincha-typography>
+  </header>
+
+  <section>
+    <pichincha-typography variant="prelo" color="bp-primary-blue500" weight="400" size="20px" category="h2">
+      Cliente: {{fullNameCustomer()}}
+    </pichincha-typography>
+    <div style="height: 24px;"></div>
+
+    <div style="display: flex; justify-content: space-between;">
+      <div style="width: 180px;"><pichincha-button size="medium" id="buttonReport" customWidth="180px"
+          label="Estado de cuenta" (click)="handleGenerateReport()">
+        </pichincha-button></div>
+      <div style="width: 180px;"><pichincha-button size="medium" id="button" customWidth="180px" label="Nueva"
+          (click)="handleCreateANewItem()">
+        </pichincha-button></div>
+    </div>
+
+    <div class="container-table mt-4">
+      <pichincha-table size-start="10" [headers]="tableHeaders" [rows]="itemss()"
+        [actions]="tableActions"></pichincha-table>
+
+      <!-- Custom pagination controls -->
+      <div class="d-flex justify-content-between align-items-center mt-3 pagination-container" *ngIf="totalPages > 1">
+        <div>
+          <pichincha-typography variant="prelo-sans" color="bp-neutral-gray700" weight="400" size="14px"
+            line-height="20px">
+            Mostrando {{ currentPage * pageSize + 1 }} -
+            {{ Math.min((currentPage + 1) * pageSize, totalElements) }} de
+            {{ totalElements }} registros
+          </pichincha-typography>
+        </div>
+
+        <div class="d-flex align-items-center gap-2">
+          <pichincha-button size="small" variant="outline" [disabled]="currentPage === 0"
+            label="Anterior"></pichincha-button>
+
+          <span class="mx-2">
+            <pichincha-typography variant="prelo-sans" color="bp-neutral-gray700" weight="400" size="14px"
+              line-height="20px">
+              Página {{ currentPage + 1 }} de {{ totalPages }}
+            </pichincha-typography>
+          </span>
+
+          <pichincha-button size="small" variant="outline" [disabled]="currentPage >= totalPages - 1"
+            label="Siguiente"></pichincha-button>
+        </div>
+      </div>
+    </div>
+    <pichincha-button size="medium" id="button" customWidth="180px" label="Lista clientes"
+      (click)="handleReturnCustomer()"></pichincha-button>
+  </section>
+</div>

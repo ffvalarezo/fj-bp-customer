@@ -17,7 +17,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"movementId\": 1,\n  \"amount\": 100.0,\n  \"type\": \"DEPOSIT\",\n  \"date\": \"2025-07-22\"\n}"
+          "raw": "{\n  \"accountNumber\": \"1234567890\",\n  \"type\": \"CREDIT\",\n  \"value\": 100.0,\n  \"balance\": 200.0\n}"
         },
         "url": {
           "raw": "http://localhost:8080/movements",
@@ -110,6 +110,26 @@
             { "key": "endDate", "value": "2025-07-22" },
             { "key": "customerId", "value": "123" }
           ]
+        }
+      }
+    },
+    {
+      "name": "Get Movements By Account Number",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "x-guid", "value": "123e4567-e89b-12d3-a456-426614174000", "type": "text" },
+          { "key": "x-channel", "value": "01", "type": "text" },
+          { "key": "x-medium", "value": "01", "type": "text" },
+          { "key": "x-app", "value": "12345", "type": "text" },
+          { "key": "x-session", "value": "test-session", "type": "text" }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/movements/account/1234567890",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["movements", "account", "1234567890"]
         }
       }
     }

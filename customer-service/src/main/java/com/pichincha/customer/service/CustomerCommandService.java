@@ -6,10 +6,10 @@ import reactor.core.publisher.Mono;
 
 public interface CustomerCommandService {
 
-	Mono<Customer> createCustomer(Mono<Customer> request);
+    Mono<Customer> createCustomer(Mono<Customer> request);
 
-  Mono<Customer> updateCustomer(Integer id, Mono<Customer> request);
+    Mono<Customer> updateCustomer(Integer id, Mono<Customer> request);
 
-  Mono<Void> deleteCustomer(Integer id);
+    Mono<Void> deleteCustomer(Integer id);
 
 }

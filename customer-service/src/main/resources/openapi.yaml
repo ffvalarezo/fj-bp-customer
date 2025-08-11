@@ -285,6 +285,61 @@ paths:
           description: Customer deleted successfully
         '404':
           description: Customer not found
+  /customers/account:
+    post:
+      tags:
+        - Customers
+      summary: Create a new customer and account
+      operationId: createCustomerWithAccount
+      parameters:
+        - name: x-guid
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 60
+            pattern: '^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$'
+        - name: x-channel
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 2
+            pattern: '^\d+$'
+        - name: x-medium
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 2
+            pattern: '^\d+$'
+        - name: x-app
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 5
+            pattern: '^\d+$'
+        - name: x-session
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 100
+      requestBody:
+        description: Customer and account to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerWithAccount'
+      responses:
+        '201':
+          description: Customer and account created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerWithAccount'
 
 components:
   schemas:
@@ -338,3 +393,30 @@ components:
         active:
           type: boolean
           example: true
+    AccountRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+        accountNumber:
+          type: string
+        accountType:
+          type: string
+          enum: [SAVINGS, CURRENT]
+        initialBalance:
+          type: number
+        status:
+          type: boolean
+        customerId:
+          type: integer
+      required: [accountNumber, accountType, initialBalance, status]
+    CustomerWithAccount:
+      type: object
+      required:
+        - customer
+        - account
+      properties:
+        customer:
+          $ref: '#/components/schemas/Customer'
+        account:
+          $ref: '#/components/schemas/AccountRequest'

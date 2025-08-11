@@ -28,12 +28,17 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(CustomerNotFoundException.class)
 	public ResponseEntity<Object> handleCustomerNotFoundException(CustomerNotFoundException exception,
-			WebRequest request) {
+			ServerWebExchange request) {
 		Map<String, Object> data = configProperties.getValuesErrorCatalogByKey("notFoundException");
 		CustomProblemDetail problemDetail = getProblemDetail(data.get("title").toString(), exception.getMessage(),
 				DOMAIN_HOME, CONTEXT, data.get("resource").toString(), data.get("component").toString(),
 				data.get("backend").toString());
 		return new ResponseEntity<>(problemDetail, HttpStatus.NOT_FOUND);
+	}
+
+	@ExceptionHandler(ForbiddenException.class)
+	public ResponseEntity<Object> handleForbiddenException(Exception exception, ServerWebExchange exchange) {
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exception.getMessage());
 	}
 
 	@ExceptionHandler(CustomerValidationException.class)
@@ -60,19 +65,15 @@ public class GlobalExceptionHandler {
 		problemDetail.setErrors(allErrorDetailByKey);
 		return new ResponseEntity<>(problemDetail, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-		
+
 	@ExceptionHandler(WebExchangeBindException.class)
-	public ResponseEntity<CustomProblemDetail> handleWebExchangeBindException(
-			WebExchangeBindException exception) {
-		List<ErrorDetail> errorDetails = exception.getFieldErrors().stream()
-				.map(error -> ErrorDetail.builder()
-						.code(error.getField())
-						.message(error.getDefaultMessage())
-						.businessMessage(error.getDefaultMessage())
-						.build())
+	public ResponseEntity<CustomProblemDetail> handleWebExchangeBindException(WebExchangeBindException exception) {
+		List<ErrorDetail> errorDetails = exception
+				.getFieldErrors().stream().map(error -> ErrorDetail.builder().code(error.getField())
+						.message(error.getDefaultMessage()).businessMessage(error.getDefaultMessage()).build())
 				.toList();
-		CustomProblemDetail problemDetail = CustomProblemDetail.forStatusAndDetail(
-				HttpStatus.BAD_REQUEST.value(), "Validation failed");
+		CustomProblemDetail problemDetail = CustomProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST.value(),
+				"Validation failed");
 		problemDetail.setTitle("Validation Error");
 		problemDetail.setInstance(DOMAIN_HOME);
 		problemDetail.setType(CONTEXT);

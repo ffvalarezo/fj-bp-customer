@@ -1,0 +1,80 @@
+<div class="list-items">
+    <header class="list-items__title">
+        <pichincha-typography variant="prelo-slab" color="bp-primary-blue500" weight="400" size="32px" category="h1">
+            Reporte de Movimientos
+        </pichincha-typography>
+    </header>
+    <section>
+        <pichincha-typography variant="prelo" color="bp-primary-blue500" weight="400" size="16px">
+            Cliente: {{ customerResponse()?.fullName }}
+        </pichincha-typography>
+        <pichincha-typography variant="prelo" color="bp-primary-blue500" weight="400" size="14px">
+            Identificacion: {{ customerResponse()?.identification }}
+        </pichincha-typography>
+
+        <div style="display: flex; justify-content: space-between;">
+            <div style="width: 180px;">
+                <pichincha-date-picker [value]="startDate" label="Desde" disabled="false"
+                    message="Fecha inicial de reporte" language="en-US" icon-input="date_range"
+                    format-date="yyyy/mm/dd"></pichincha-date-picker>
+            </div>
+            <div style="width: 180px;">
+                <pichincha-date-picker [value]="endDate" label="Hasta" disabled="false" message="Fecha final de reporte"
+                    language="en-US" icon-input="date_range" format-date="yyyy/mm/dd"></pichincha-date-picker>
+            </div>
+        </div>
+        <div class="list-items__buttons">
+            <pichincha-button size="medium" id="button" customWidth="180px" label="Generar reporte"
+                (click)="handleReport()">
+            </pichincha-button>
+        </div>
+        <div *ngIf="loadingData() && report()">
+            <div *ngFor="let account of report()?.accounts">
+                <pichincha-typography variant="prelo" color="bp-primary-blue500" weight="600" size="16px">
+                    Cuenta: {{ account.accountNumber }}
+                </pichincha-typography>
+                <pichincha-typography variant="prelo" color="bp-primary-blue500" weight="600" size="14px">
+                    Tipo: {{ account.accountType === 'SAVINGS' ? 'Ahorro' : account.accountType === 'CURRENT' ?
+                    'Corriente' : account.accountType }}
+                </pichincha-typography>
+                <pichincha-typography variant="prelo" color="bp-primary-blue500" weight="600" size="14px">
+                    Saldo: {{ account.initialBalance | currency:'USD' }}
+                </pichincha-typography>
+                <table style="width:100%; margin-bottom: 16px;">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Tipo</th>
+                            <th>Valor</th>
+                            <th>Saldo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let mov of getMovementsForAccount(account.accountNumber)">
+                            <td>{{ (+mov.date) * 1000 | date:'dd/MM/yyyy HH:mm' }}</td>
+                            <td>
+                                {{
+                                mov.type === 'DEBIT' ? 'Retiro' :
+                                mov.type === 'CREDIT' ? 'Depósito' :
+                                mov.type
+                                }}
+                            </td>
+                            <td>{{ mov.value | currency:'USD' }}</td>
+                            <td>{{ mov.balance | currency:'USD' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="margin-top: 24px;">
+                <pichincha-typography variant="prelo" color="bp-primary-blue500" weight="600" size="16px">
+                    Total Créditos: {{ report()?.summary?.totalCredits | currency:'USD' }}
+                </pichincha-typography>
+                <pichincha-typography variant="prelo" color="bp-primary-blue500" weight="600" size="16px">
+                    Total Débitos: {{ report()?.summary?.totalDebits | currency:'USD' }}
+                </pichincha-typography>
+            </div>
+        </div>
+        <pichincha-button size="medium" id="button" customWidth="180px" label="Ir a cuentas"
+            (click)="handleReturnAccount()"></pichincha-button>
+    </section>
+</div>

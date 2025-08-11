@@ -7,8 +7,10 @@ import reactor.core.publisher.Mono;
 
 public interface CustomerQueryService {
 
-	Mono<Customer> getCustomerById(Integer id);
+    Mono<Customer> getCustomerById(Integer id);
 
-	Flux<Customer> getAllCustomers();
+    Flux<Customer> getAllCustomers();
+
+    Mono<Customer> getCustomerByIdentification(String identification);
 
 }

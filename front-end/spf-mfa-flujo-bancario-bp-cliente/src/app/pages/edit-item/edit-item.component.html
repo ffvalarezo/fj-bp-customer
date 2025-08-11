@@ -1,0 +1,163 @@
+<div class="edit-item">
+  <header class="edit-item__title">
+    <pichincha-typography variant="prelo-slab" color="bp-primary-blue500" weight="400" size="32px" category="h1">
+      {{ editForm() ? "Editar" : "Registrar" }} Cliente
+    </pichincha-typography>
+  </header>
+
+  <section class="edit-item__customer-toggle" *ngIf="!editForm()">
+    <pichincha-check-box id-element="includeAccount" typeCheck="check" text="Incluir cuenta bancaria"
+      (clickCheck)="onIncludeAccountChange($event)"></pichincha-check-box>
+  </section>
+
+  <section class="edit-item__container-form">
+    <!-- Customer Form -->
+    <form id="customerForm" style="width: 500px" [formGroup]="customerForm" class="edit-item__form">
+      <pichincha-typography variant="prelo-slab" color="bp-primary-blue500" weight="400" size="24px" category="h2">
+        Información del Cliente
+      </pichincha-typography>
+
+      <pichincha-input-message *ngIf="formErrorMessage" state="error" errorMessage="Mensaje"
+        [infoMessage]="formErrorMessage">
+      </pichincha-input-message>
+
+      <div class="form-group">
+        <div style="display: flex; gap: 16px">
+          <pichincha-check-box id-element="genderMasculino" typeCheck="check"
+            [checked]="customerForm.get('gender')?.value === 'Masculino'"
+            (clickCheck)="customerForm.get('gender')?.setValue('Masculino')" text="Masculino">
+          </pichincha-check-box>
+          <pichincha-check-box id-element="genderFemenino" typeCheck="check"
+            [checked]="customerForm.get('gender')?.value === 'Femenino'"
+            (clickCheck)="customerForm.get('gender')?.setValue('Femenino')" text="Femenino">
+          </pichincha-check-box>
+        </div>
+      </div>
+
+      <pichincha-input id="inputFullName" label="Nombre Completo" formControlName="fullName"
+        placeholder="Ej: Juan Pérez García" [state]="fullName.invalid && fullName.touched ? 'error' : 'default'"
+        [errorHelper]="fullName.hasError('required') ? 'Campo requerido' : ''">
+      </pichincha-input>
+
+
+      <div class="form-group">
+        <div style="display: flex; gap: 16px">
+          <pichincha-check-box id-element="statusActivo" typeCheck="check"
+            [checked]="customerForm.get('active')?.value === true"
+            (clickCheck)="customerForm.get('active')?.setValue(true)" text="Activo">
+          </pichincha-check-box>
+          <pichincha-check-box id-element="statusInactivo" typeCheck="check"
+            [checked]="customerForm.get('active')?.value === false"
+            (clickCheck)="customerForm.get('active')?.setValue(false)" text="Inactivo">
+          </pichincha-check-box>
+        </div>
+      </div>
+      <pichincha-input label="Edad" formControlName="age" type="number" placeholder="Ej: 25"
+        [state]="age.invalid && age.touched ? 'error' : 'default'" [errorHelper]="
+          age.hasError('required')
+            ? 'Campo requerido'
+            : age.hasError('min')
+            ? 'Debe ser mayor a 18 años'
+            : age.hasError('max')
+            ? 'Edad máxima 120 años'
+            : ''
+        ">
+      </pichincha-input>
+
+      <pichincha-input label="Identificación" formControlName="identification" placeholder="Ej: 1234567890"
+        maxlength="10" [state]="
+          identification.invalid && identification.touched ? 'error' : 'default'
+        " [errorHelper]="
+          identification.hasError('required')
+            ? 'Campo requerido'
+            : identification.hasError('invalidIdentification')
+            ? 'Debe tener 10 dígitos'
+            : ''
+        ">
+      </pichincha-input>
+
+      <pichincha-input label="Dirección" formControlName="address" placeholder="Ej: Av. 10 de Agosto N24-253"
+        [state]="address.invalid && address.touched ? 'error' : 'default'"
+        [errorHelper]="address.hasError('required') ? 'Campo requerido' : ''">
+      </pichincha-input>
+
+      <pichincha-input label="Celular" formControlName="celular" placeholder="Ej: 0987654321"
+        [state]="celular.invalid && celular.touched ? 'error' : 'default'"
+        [errorHelper]="celular.hasError('required') ? 'Campo requerido' : ''">
+      </pichincha-input>
+
+      <pichincha-input label="Email" formControlName="email" type="email" placeholder="Ej: juan.perez@email.com"
+        [state]="email.invalid && email.touched ? 'error' : 'default'" [errorHelper]="
+          email.hasError('required')
+            ? 'Campo requerido'
+            : email.hasError('email')
+            ? 'Email inválido'
+            : ''
+        ">
+      </pichincha-input>
+
+      <ng-container *ngIf="!editForm()">
+        <pichincha-input label="Contraseña" formControlName="password" type="password" placeholder="Mínimo 6 caracteres"
+          [state]="password.invalid && password.touched ? 'error' : 'default'" [errorHelper]="
+        password.hasError('required')
+          ? 'Campo requerido'
+          : password.hasError('minlength')
+          ? 'Mínimo 6 caracteres'
+          : ''
+          ">
+        </pichincha-input>
+      </ng-container>
+
+    </form>
+
+    <!-- Account Form - Only show when checkbox is checked and not editing -->
+    <form *ngIf="includeAccount() && !editForm()" id="accountForm" style="width: 500px; margin-top: 32px"
+      [formGroup]="accountForm" class="edit-item__form">
+      <pichincha-typography variant="prelo-slab" color="bp-primary-blue500" weight="400" size="24px" category="h2">
+        Información de la Cuenta
+      </pichincha-typography>
+
+      <div class="form-group">
+        <div style="display: flex; gap: 16px">
+          <pichincha-check-box id-element="accountTypeAhorros" typeCheck="check"
+            [checked]="accountType.value === 'SAVINGS'" (clickCheck)="accountType.setValue('SAVINGS')" text="Ahorros">
+          </pichincha-check-box>
+          <pichincha-check-box id-element="accountTypeCorriente" typeCheck="check"
+            [checked]="accountType.value === 'CURRENT'" (clickCheck)="accountType.setValue('CURRENT')"
+            text="Corriente">
+          </pichincha-check-box>
+        </div>
+      </div>
+      <pichincha-input label="Número de Cuenta" formControlName="accountNumber" placeholder="Ej: 2012345678"
+        onlyRead="true" [state]="accountNumber.invalid && accountNumber.touched ? 'error' : undefined"
+        errorHelper="Campo requerido">
+      </pichincha-input>
+      <pichincha-button variant="primary" label="Generar" size="small" iconName="star"
+        (clickEvent)="generateAccountNumber()">
+      </pichincha-button>
+
+      <pichincha-input label="Saldo Inicial" formControlName="initialBalance" type="number" step="0.01"
+        placeholder="Ej: 1000.00" [state]="
+          initialBalance.invalid && initialBalance.touched ? 'error' : undefined
+        " [errorHelper]="
+          initialBalance.hasError('required')
+            ? 'Campo requerido'
+            : initialBalance.hasError('min')
+            ? 'El saldo debe ser mayor o igual a 0'
+            : ''
+        ">
+      </pichincha-input>
+    </form>
+
+    <div class="edit-item__buttons" style="margin-top: 32px">
+      <pichincha-button (clickEvent)="resetForm()" size="large" variant="secondary" customWidth="200px"
+        label="Cancelar">
+      </pichincha-button>
+      <pichincha-button (clickEvent)="onSubmit()" size="large" customWidth="200px" [disabled]="
+          customerForm.invalid ||
+          (includeAccount() && !editForm() && accountForm.invalid)
+        " label="{{ editForm() ? 'Editar' : 'Registrar' }}">
+      </pichincha-button>
+    </div>
+  </section>
+</div>

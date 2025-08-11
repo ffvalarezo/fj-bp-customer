@@ -334,11 +334,68 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/AccountRequest'
+  /accounts/filter/movement/{accountNumber}:
+    get:
+      tags:
+        - Accounts
+      summary: Get all accounts by accountNumber
+      operationId: getAccountsByAccountNumber
+      parameters:        
+        - name: accountNumber
+          in: path
+          required: true
+          schema:
+            type: string        
+        - name: x-guid
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 60
+            pattern: '^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$'
+        - name: x-channel
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 2
+            pattern: '^\d+$'
+        - name: x-medium
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 2
+            pattern: '^\d+$'
+        - name: x-app
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 5
+            pattern: '^\d+$'
+        - name: x-session
+          in: header
+          required: true
+          schema:
+            type: string
+            maxLength: 100
+      responses:
+        '200':
+          description: List of accounts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccountRequest'                  
 components:
   schemas:
     AccountRequest:
       type: object
       properties:
+        id:
+          type: integer
         accountNumber:
           type: string
         accountType:

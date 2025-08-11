@@ -36,7 +36,11 @@ spring:
           ms: 2000
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer  
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: account-sync-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 logging:
   level:
     org:
@@ -53,6 +57,7 @@ logging:
       enabled: true
       topic:
         name: ${KAFKA_TOPIC:dev-transactional-log}
+        accountSync: ${KAFKA_ACCOUNT_SYNC_TOPIC:dev-account-sync}
     tracer:
       enabled: true
       exclusion:

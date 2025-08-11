@@ -1,0 +1,232 @@
+// Dashboard Component - Estilo compatible con Design System Banco Pichincha
+.dashboard-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  min-height: calc(100vh - 64px);
+}
+
+.dashboard-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #333333;
+  margin: 0 0 0.5rem 0;
+}
+
+.dashboard-subtitle {
+  font-size: 1.125rem;
+  color: #666666;
+  margin: 0;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #333333;
+  margin-bottom: 1.5rem;
+}
+
+.microfrontends-section {
+  margin-bottom: 3rem;
+}
+
+.microfrontends-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.microfrontend-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  &.available {
+    border-color: #28a745;
+
+    &:hover {
+      border-color: #1e7e34;
+    }
+  }
+
+  &.unavailable {
+    border-color: #dc3545;
+    opacity: 0.7;
+  }
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333333;
+  margin: 0;
+}
+
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+
+  &.status-available {
+    background-color: #d4edda;
+    color: #155724;
+  }
+
+  &.status-unavailable {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+}
+
+.card-body {
+  margin-bottom: 1.5rem;
+}
+
+.card-description {
+  color: #666666;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.card-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #666666;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.access-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:not(:disabled) {
+    background-color: #0066cc;
+    color: white;
+
+    &:hover {
+      background-color: #0056b3;
+      transform: translateY(-1px);
+    }
+
+    &:focus {
+      outline: 2px solid #0066cc;
+      outline-offset: 2px;
+    }
+  }
+
+  &:disabled {
+    background-color: #e9ecef;
+    color: #6c757d;
+    cursor: not-allowed;
+  }
+}
+
+.system-info {
+  background-color: white;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  border-left: 4px solid #0066cc;
+}
+
+.info-content {
+  font-size: 0.875rem;
+  color: #333333;
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 1rem;
+  }
+
+  .dashboard-title {
+    font-size: 2rem;
+  }
+
+  .microfrontends-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .microfrontend-card {
+    padding: 1rem;
+  }
+
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}

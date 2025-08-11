@@ -1,0 +1,140 @@
+<div class="test-login-container">
+  <div class="test-login-card">
+    <div class="login-header">
+      <img src="assets/logo-bp.svg" alt="Banco Pichincha" class="login-logo" />
+      <h1 class="login-title">Iniciar Sesión</h1>
+      <p class="login-subtitle">
+        Ingrese sus credenciales para acceder al sistema
+      </p>
+    </div>
+
+    <form
+      [formGroup]="testLoginForm"
+      (ngSubmit)="onTestSubmit()"
+      class="test-login-form"
+    >
+      <!-- Campo Usuario -->
+      <div class="form-field">
+        <div class="input-wrapper">
+          <label for="username" class="input-label"> Usuario * </label>
+          <input
+            id="username"
+            type="text"
+            placeholder="Ingrese su usuario"
+            [value]="testLoginForm.get('username')?.value || ''"
+            (input)="onFieldChange('username', $event)"
+            class="pichincha-input"
+            [class.input-error]="isFieldInvalid('username')"
+          />
+          <div *ngIf="isFieldInvalid('username')" class="field-error">
+            <pichincha-typography
+              variant="caption"
+              color="bp-semantic-error500"
+              weight="400"
+              size="12px"
+              line-height="16px"
+              category="text"
+            >
+              {{ getFieldErrorMessage("username") }}
+            </pichincha-typography>
+          </div>
+        </div>
+      </div>
+
+      <!-- Campo Contraseña -->
+      <div class="form-field">
+        <div class="input-wrapper">
+          <label for="password" class="input-label"> Contraseña * </label>
+          <input
+            id="password"
+            type="password"
+            placeholder="Ingrese su contraseña"
+            [value]="testLoginForm.get('password')?.value || ''"
+            (input)="onFieldChange('password', $event)"
+            class="pichincha-input"
+            [class.input-error]="isFieldInvalid('password')"
+          />
+          <div *ngIf="isFieldInvalid('password')" class="field-error">
+            <pichincha-typography
+              variant="caption"
+              color="bp-semantic-error500"
+              weight="400"
+              size="12px"
+              line-height="16px"
+              category="text"
+            >
+              {{ getFieldErrorMessage("password") }}
+            </pichincha-typography>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mensaje de error -->
+      <div *ngIf="errorMessage" class="error-message">
+        <pichincha-typography
+          variant="body"
+          color="bp-semantic-error500"
+          weight="400"
+          size="14px"
+          line-height="20px"
+          category="text"
+        >
+          {{ errorMessage }}
+        </pichincha-typography>
+      </div>
+
+      <!-- Mensaje de éxito -->
+      <div *ngIf="successMessage" class="success-message">
+        <pichincha-typography
+          variant="body"
+          color="bp-semantic-success500"
+          weight="400"
+          size="14px"
+          line-height="20px"
+          category="text"
+        >
+          {{ successMessage }}
+        </pichincha-typography>
+      </div>
+
+      <!-- Información del token -->
+      <div *ngIf="tokenInfo" class="token-info">
+        <pichincha-typography
+          variant="body"
+          color="bp-primary-blue600"
+          weight="500"
+          size="14px"
+          line-height="20px"
+          category="text"
+        >
+          <strong>Token Info:</strong><br />
+          Usuario: {{ tokenInfo.username }}<br />
+          Roles: {{ tokenInfo.roles?.join(", ") }}<br />
+          Expira: {{ tokenInfo.expiration | date : "medium" }}
+        </pichincha-typography>
+      </div>
+
+      <!-- Botones -->
+      <div class="button-group">
+        <pichincha-button
+          size="large"
+          color="primary"
+          [loading]="isLoading"
+          [disabled]="!canSubmit()"
+          (click)="onTestSubmit()"
+          label="Ingresar"
+          customWidth="200px"
+        ></pichincha-button>
+
+        <pichincha-button
+          size="large"
+          color="secondary"
+          [disabled]="!jwtAuthService.isAuthenticated()"
+          (click)="onLogout()"
+          label="Cerrar sessión"
+          customWidth="200px"
+        ></pichincha-button>
+      </div>
+    </form>
+  </div>
+</div>

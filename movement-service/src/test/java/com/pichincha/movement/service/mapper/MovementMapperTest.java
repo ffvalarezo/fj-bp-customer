@@ -22,7 +22,7 @@ class MovementMapperTest {
 	void testToDto() {
 		MovementEntity entity = new MovementEntity();
 		entity.setId(1L);
-		entity.setDate(LocalDateTime.of(2025, 7, 22, 10, 0));
+		entity.setCreatedAt(LocalDateTime.of(2025, 7, 22, 10, 0));
 		entity.setMovementType(MovementType.CREDIT);
 		entity.setValue(BigDecimal.valueOf(1600.0));
 		entity.setBalance(BigDecimal.valueOf(200.0));

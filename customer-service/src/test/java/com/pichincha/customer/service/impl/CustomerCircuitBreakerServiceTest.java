@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
+import com.pichincha.customer.util.Constants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -64,7 +65,7 @@ class CustomerCircuitBreakerServiceTest {
 	@Test
 	void testGetCustomerByIdFallback() {
 		// Given
-		String customerId = "9999999999";
+		String customerId = "UNKNOWN";
 		Exception exception = new RuntimeException("Service error");
 
 		// When
@@ -74,10 +75,10 @@ class CustomerCircuitBreakerServiceTest {
 		StepVerifier.create(result).assertNext(customer -> {
 			assertNotNull(customer);
 			assertEquals(customerId, customer.getIdentification());
-			assertEquals("Service Unavailable", customer.getFullName());
-			assertEquals("service.unavailable@banco.com", customer.getEmail());
-			assertEquals("N/A", customer.getCelular());
-			assertEquals("Service temporarily unavailable", customer.getAddress());
+			assertEquals(Constants.FALLBACK_FULL_NAME, customer.getFullName());
+			assertEquals(Constants.FALLBACK_EMAIL, customer.getEmail());
+			assertEquals(Constants.FALLBACK_CELULAR, customer.getCelular());
+			assertEquals(Constants.FALLBACK_ADDRESS, customer.getAddress());
 			assertEquals(false, customer.getActive());
 		}).verifyComplete();
 	}
