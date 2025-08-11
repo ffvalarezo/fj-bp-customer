@@ -1,0 +1,78 @@
+spring:
+  # Database configuration for development (H2 in-memory)
+  r2dbc:
+    url: r2dbc:h2:mem:///testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password: password
+    pool:
+      initial-size: 2
+      max-size: 5
+      max-idle-time: 10m
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+      data-locations: classpath:data.sql
+  kafka:
+    enabled: false
+    properties:
+      sasl:
+        mechanism: PLAIN
+        jaas:
+          config: org.apache.kafka.common.security.plain.PlainLoginModule required username= ${KAFKA_USER:kafka-dev-user} password=${KAFKA_PASSWORD:kafka-dev-pass};
+      bootstrap:
+        servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+      security:
+        protocol: ${KAFKA_SECURITY_PROTOCOL:PLAINTEXT}
+      session:
+        timeout:
+          ms: 45000
+      request:
+        timeout:
+          ms: 2000
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: account-sync-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+logging:
+  level:
+    org:
+      apache:
+        kafka: OFF
+    com:
+      pichincha:
+        common:
+          handler: OFF
+  transactional:
+    enabled: true
+    sendLog: true
+    kafka:
+      enabled: true
+      topic:
+        name: ${KAFKA_TOPIC:dev-transactional-log}
+        accountSync: ${KAFKA_ACCOUNT_SYNC_TOPIC:dev-account-sync}
+    tracer:
+      enabled: true
+      exclusion:
+        uri: actuator,swagger,api-docs,csrf,favicon  
+    obfuscation:
+      fields: ${MY_FIELDS_TO_OFUSCATE:(id)|(phone)|(lastName)}
+      enabled: false
+      character: '*****************'
+      obfuscation-type: REQUEST
+    handle-error:
+      status-code: 404
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: dummy
+jwt:
+  secret: mySuperSecretKeyForJwtToken1234567890
