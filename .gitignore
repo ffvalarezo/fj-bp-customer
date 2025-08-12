@@ -175,3 +175,10 @@ buildNumber.properties
 # Node
 node_modules/
 dist/
+
+# Angular
+.angular/
+**/.angular/
+# Node
+node_modules/
+dist/
